@@ -3,6 +3,7 @@ import sys
 from PySide6.QtCore import Qt, QTranslator, QCoreApplication
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentTranslator, qconfig, InfoBar, InfoBarPosition
+from qfluentwidgets import (setTheme)
 
 from ok.gui import resources
 from ok.gui.common.config import cfg
@@ -24,7 +25,6 @@ def init_app_config():
     translator = FluentTranslator(locale)
     app.installTranslator(translator)
     translator = QTranslator(app)
-    # full_path = os.path.join(i18n_path, f"{locale.name()}")
 
     if translator.load(locale.name(), ":/i18n"):
         translator.setParent(app)
@@ -34,6 +34,7 @@ def init_app_config():
     else:
         logger.info(f"No translation available for {locale}, falling back to English/default.")
     qconfig.theme = cfg.themeMode.value
+    setTheme(qconfig.theme)
     return app, locale
 
 

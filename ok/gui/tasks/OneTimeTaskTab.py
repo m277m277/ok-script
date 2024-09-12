@@ -1,5 +1,3 @@
-from typing import List
-
 import ok.gui
 from ok.gui.tasks.TaskCard import TaskCard
 from ok.gui.tasks.TaskTab import TaskTab

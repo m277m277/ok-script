@@ -7,8 +7,11 @@ logger = get_logger(__name__)
 
 
 def get_installed_packages(pip_command):
-    output = subprocess.check_output(pip_command + ['freeze'], universal_newlines=True)
-    return set(line.split('==')[0] for line in output.splitlines())
+    try:
+        output = subprocess.check_output(pip_command + ['freeze'], universal_newlines=True)
+        return set(line.split('==')[0] for line in output.splitlines())
+    except Exception as e:
+        logger.info(f'Failed to get installed packages {str(e)}')
 
 
 def get_package_required_by(package_name, pip_command):
@@ -86,6 +89,9 @@ def get_all_dependencies(packages, pip_command):
 def clean_packages(to_install, pip_command):
     installed_packages = get_installed_packages(pip_command)
     logger.info(f'installed_packages = {installed_packages}')
+    if not installed_packages:
+        logger.info("No installed_packages.")
+        return
 
     dependency_map = get_package_dependencies(installed_packages,
                                               pip_command=[r'python\app_env\Scripts\python.exe', '-m', 'pip'])

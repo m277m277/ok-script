@@ -1,3 +1,8 @@
+import sys
+
+import psutil
+from PySide6.QtCore import QCoreApplication
+
 import argparse
 import importlib
 import json
@@ -6,12 +11,7 @@ import os
 import re
 import shutil
 import subprocess
-import sys
 from functools import cmp_to_key
-
-import psutil
-from PySide6.QtCore import QCoreApplication
-
 from ok.config.Config import Config
 from ok.gui.Communicate import communicate
 from ok.gui.util.Alert import alert_error, alert_info
@@ -306,6 +306,7 @@ class GitUpdater:
     @staticmethod
     def do_clear_dependencies():
         try:
+            delete_if_exists('paddle_model')
             app_python_folder = os.path.abspath(os.path.join('python', 'app_env'))
             kill_process_by_path(app_python_folder)
             delete_if_exists(app_python_folder)

@@ -51,7 +51,7 @@ if __name__ == "__main__":
             build_repo = git.Repo.clone_from('https://github.com/ok-oldking/mini_python', mini_python,
                                              depth=1)
         python_dir = os.path.join(build_dir, 'python')
-        python_src = os.path.join(mini_python, 'Python_3.11.9')
+        python_src = os.path.join(mini_python, 'Python_3.12.6_win_64')
 
         shutil.copytree(python_src, python_dir)
 
@@ -70,6 +70,13 @@ if __name__ == "__main__":
         repo_dir = os.path.join(build_dir, 'repo', tag)
         build_repo = git.Repo.clone_from(url, repo_dir, branch=tag, depth=1)
         logger.info(f'Cloned repository to: {repo_dir}')
+
+        updater_exe = os.path.join(repo_dir, 'updater.exe')
+        if os.path.exists(updater_exe):
+            logger.info('handle legacy updater.exe')
+            target_updater_dir = os.path.join(build_dir, '_internal', 'ok', 'binaries')
+            os.makedirs(target_updater_dir)
+            shutil.copy(updater_exe, target_updater_dir)
 
         fix_version_in_repo(repo_dir, tag)
 

@@ -28,9 +28,9 @@ class UpdateBar(QWidget):
         self.hbox_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         self.hbox_layout.setSpacing(20)
 
-        # self.delete_dependencies_button = PushButton(self.tr("Delete Downloaded Dependencies"))
-        # self.delete_dependencies_button.clicked.connect(self.updater.clear_dependencies)
-        # self.hbox_layout.addWidget(self.delete_dependencies_button)
+        self.delete_dependencies_button = PushButton(self.tr("Delete Downloaded Dependencies"))
+        self.delete_dependencies_button.clicked.connect(self.updater.clear_dependencies)
+        self.hbox_layout.addWidget(self.delete_dependencies_button)
 
         communicate.versions.connect(self.update_versions)
         communicate.update_running.connect(self.update_running)

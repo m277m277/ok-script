@@ -1,11 +1,10 @@
-import ctypes
 import sys
-import threading
 import time
-from typing import Tuple
 
 from PySide6.QtCore import QCoreApplication
 
+import ctypes
+import threading
 from ok.capture.BaseCaptureMethod import CaptureException
 from ok.capture.adb.DeviceManager import DeviceManager
 from ok.gui.Communicate import communicate
@@ -14,6 +13,7 @@ from ok.stats.StreamStats import StreamStats
 from ok.task.BaseTask import BaseTask
 from ok.task.TriggerTask import TriggerTask
 from ok.util.clazz import init_class_by_name
+from typing import Tuple
 
 logger = get_logger(__name__)
 
@@ -314,7 +314,9 @@ class TaskExecutor:
                 name = task.name
                 task.disable()
                 from ok.gui import ok
-                communicate.notification.emit(str(e), ok.app.tr(name), True, True)
+                error = str(e)
+                communicate.notification.emit(error, ok.app.tr(name), True, True)
+                task.info_set(QCoreApplication.tr('app', 'Error'), error)
                 logger.error(f"{name} exception", e)
                 if self._frame is not None:
                     communicate.screenshot.emit(self.frame, name)

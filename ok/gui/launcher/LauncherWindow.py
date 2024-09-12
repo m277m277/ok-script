@@ -52,7 +52,8 @@ class LauncherWindow(Window):
 
         self.setLayout(self.layout)
         communicate.notification.connect(self.show_notification)
-        StyleSheet.MESSAGE_WINDOW.apply(self)
+        StyleSheet.TAB.apply(self)
+        # StyleSheet.MESSAGE_WINDOW.apply(self)
 
     def show_notification(self, message, title=None, error=False, tray=False):
         show_info_bar(self.window(), message, title, error)

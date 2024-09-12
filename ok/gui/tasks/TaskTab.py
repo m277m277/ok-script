@@ -36,6 +36,8 @@ class TaskTab(Tab):
         # Start the timer with a timeout of 1000 milliseconds (1 second)
         self.timer.start(1000)
         self.keep_info_when_done = False
+        self.current_task = None
+        self.current_task_name = ""
 
     def in_current_list(self, task):
         return True
@@ -57,27 +59,38 @@ class TaskTab(Tab):
 
     def update_info_table(self):
         task = ok.gui.executor.current_task
+        if task is not None and self.current_task is not task:
+            self.current_task = task
         if task is None or not self.in_current_list(task):
             if self.task_info_table.isVisible():
                 if not self.keep_info_when_done or self.task_info_table.rowCount() == 0:
                     self.task_info_container.hide()
+                else:
+                    self.task_info_container.titleLabel.setText(
+                        self.tr(
+                            'Completed') + self.current_task_name)
+                    self.update_task_info(self.current_task)
         else:
-            if not self.task_info_table.isVisible():
-                self.task_info_container.show()
-            info = task.info
-            self.task_info_container.titleLabel.setText(
-                self.tr(
-                    'Running') + f": {ok.gui.app.tr(task.name)} {self.time_elapsed(task.start_time)} {ok.gui.app.tr(task.description)}")
-            self.task_info_table.setRowCount(len(info))
-            for row, (key, value) in enumerate(info.items()):
-                if not self.task_info_table.item(row, 0):
-                    item0 = self.uneditable_item()
-                    self.task_info_table.setItem(row, 0, item0)
-                self.task_info_table.item(row, 0).setText(ok.gui.app.tr(key))
-                if not self.task_info_table.item(row, 1):
-                    item1 = self.uneditable_item()
-                    self.task_info_table.setItem(row, 1, item1)
-                self.task_info_table.item(row, 1).setText(ok.gui.app.tr(value_to_string(value)))
+            self.update_task_info(task)
+
+    def update_task_info(self, task):
+        if not self.task_info_table.isVisible():
+            self.task_info_container.show()
+        info = task.info
+        self.current_task_name = f": {ok.gui.app.tr(task.name)} {self.time_elapsed(task.start_time)} {ok.gui.app.tr(task.description)}"
+        self.task_info_container.titleLabel.setText(
+            self.tr(
+                'Running') + self.current_task_name)
+        self.task_info_table.setRowCount(len(info))
+        for row, (key, value) in enumerate(info.items()):
+            if not self.task_info_table.item(row, 0):
+                item0 = self.uneditable_item()
+                self.task_info_table.setItem(row, 0, item0)
+            self.task_info_table.item(row, 0).setText(ok.gui.app.tr(key))
+            if not self.task_info_table.item(row, 1):
+                item1 = self.uneditable_item()
+                self.task_info_table.setItem(row, 1, item1)
+            self.task_info_table.item(row, 1).setText(ok.gui.app.tr(value_to_string(value)))
 
     def uneditable_item(self):
         item = QTableWidgetItem()

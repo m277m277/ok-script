@@ -1,4 +1,8 @@
-Tab, ToolBar, RoundCornerContainer, #view {
+Tab,
+LauncherWindow,
+ToolBar,
+RoundCornerContainer,
+#view {
     background-color: transparent;
 }
 

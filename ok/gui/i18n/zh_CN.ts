@@ -358,6 +358,10 @@
         <source>Running</source>
         <translation>运行中</translation>
     </message>
+    <message>
+        <source>Completed</source>
+        <translation>已完成</translation>
+    </message>
 </context>
 <context>
     <name>RunBar</name>
