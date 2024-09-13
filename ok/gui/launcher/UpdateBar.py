@@ -101,7 +101,7 @@ class UpdateBar(QWidget):
         self.check_update_button.setDisabled(running)
         self.update_sources.setDisabled(running)
         self.version_list.setDisabled(running)
-        # self.delete_dependencies_button.setDisabled(running)
+        self.delete_dependencies_button.setDisabled(running)
 
     def update_versions(self, versions):
         if not versions:  # fetch version error

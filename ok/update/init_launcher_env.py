@@ -1,9 +1,10 @@
+import sys
+
 import os
 import re
 import subprocess
-import sys
-
 from ok.logging.Logger import config_logger, get_logger
+from ok.update.GitUpdater import replace_ok_script_ver
 from ok.update.python_env import delete_files, \
     create_venv, find_line_in_requirements
 
@@ -31,6 +32,24 @@ def replace_string_in_file(file_path, old_pattern, new_string):
         file.write(new_content)
 
     logger.info(f"Replaced pattern '{old_pattern}' with '{new_string}' in {file_path}")
+
+
+def create_app_env(code_dir, build_dir, dependencies):
+    full_version = find_line_in_requirements(os.path.join(code_dir, 'requirements.txt'), 'ok-script')
+    if not full_version:
+        logger.error('Could not find ok-script version in requirements.txt')
+        return
+    logger.info(f'ok-script full_version: {full_version}')
+    env_path = create_venv('app_env', os.path.join(build_dir))
+    try:
+        env_python_exe = os.path.join(env_path, 'Scripts', 'python.exe')
+        for dependency in dependencies:
+            dependency = replace_ok_script_ver(dependency, full_version)
+            subprocess.run([env_python_exe, "-m", "pip", "install"] + dependency.split())
+        delete_files(root_dir=env_path)
+        return True
+    except Exception as e:
+        logger.error("An error occurred while creating the virtual environment.", e)
 
 
 def create_launcher_env(code_dir='.', build_dir='.'):

@@ -155,7 +155,7 @@ class GitUpdater:
             return True
         except Exception as e:
             alert_error(f'Start App Error {str(e)}')
-            logger.error(f"An error occurred: {e}")
+            logger.error(f"An error occurred:", e)
             communicate.update_running.emit(False)
             return False
 
@@ -261,6 +261,8 @@ class GitUpdater:
                         continue
                 validated.append(profile)
             self.launch_profiles = validated
+            if self.launcher_config.get('profile_index', 0) > len(self.launch_profiles):
+                self.launcher_config['profile_index'] = 0
             self.cuda_version = my_cuda or "No"
             communicate.cuda_version.emit(self.cuda_version)
             communicate.launcher_profiles.emit(self.launch_profiles)
@@ -321,6 +323,7 @@ class GitUpdater:
             communicate.update_running.emit(True)
 
     def do_run(self):
+        create_venv('app_env')
         if not self.launcher_config['app_dependencies_installed']:
             alert_info(QCoreApplication.translate('app', f'Start downloading'))
             if not self.install_dependencies('app_env'):
@@ -631,10 +634,14 @@ def fix_version_in_repo(repo_dir, tag):
     with open(launcher_json, 'r', encoding='utf-8') as file:
         content = file.read()
     # Replace the version string
-    new_content = re.sub(r'ok-script(?:==[\d\.]+)?', full_version, content)
+    new_content = replace_ok_script_ver(content, full_version)
     # Write the updated content back to the file
     with open(launcher_json, 'w', encoding='utf-8') as file:
         file.write(new_content)
+
+
+def replace_ok_script_ver(content, full_version):
+    return re.sub(r'ok-script(?:==[\d\.]+)?', full_version, content)
 
 
 def add_to_path(folder_path):

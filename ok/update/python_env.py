@@ -1,7 +1,7 @@
-import shutil
-import subprocess
 import sys
 
+import shutil
+import subprocess
 from ok.logging.Logger import get_logger
 from ok.util.path import delete_if_exists
 
@@ -19,7 +19,9 @@ def delete_files(
                             'Qt6Designer.dll'
             , 'openvino_pytorch_frontend.dll', 'openvino_tensorflow_frontend.dll', 'NEWS.txt',
                             'py_tensorflow_frontend.cp311-win_amd64.pyd', 'py_pytorch_frontend.cp311-win_amd64.pyd',
-                            '*.exe'], whitelist_patterns=['adb.exe', 'python*.exe', '*pip*'], root_dir='python'):
+                            '*.exe'],
+        whitelist_patterns=['adb.exe', 't64.exe', 'w64.exe', 'cli-64.exe', 'cli.exe', 'python*.exe', '*pip*'],
+        root_dir='python'):
     """
     Delete files matching the given patterns in all directories starting from root_dir,
     except those matching the whitelist patterns.
@@ -127,19 +129,20 @@ def copy_python_files(python_dir, destination_dir):
 def modify_venv_cfg(env_dir):
     python_dir = os.path.dirname(env_dir)
     file_path = os.path.join(env_dir, 'pyvenv.cfg')
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
 
-    with open(file_path, 'w') as file:
-        for line in lines:
-            if line.startswith('home ='):
-                file.write(f'home = {python_dir}\n')
-            elif line.startswith('executable ='):
-                file.write(f'executable = {os.path.join(python_dir, "python.exe")}\n')
-            elif line.startswith('command ='):
-                file.write(f'command = {os.path.join(python_dir, "python.exe")} -m venv {env_dir}')
-            else:
-                file.write(line)
+        with open(file_path, 'w') as file:
+            for line in lines:
+                if line.startswith('home ='):
+                    file.write(f'home = {python_dir}\n')
+                elif line.startswith('executable ='):
+                    file.write(f'executable = {os.path.join(python_dir, "python.exe")}\n')
+                elif line.startswith('command ='):
+                    file.write(f'command = {os.path.join(python_dir, "python.exe")} -m venv {env_dir}')
+                else:
+                    file.write(line)
 
 
 def get_env_path(name, dir=None):
@@ -153,6 +156,7 @@ def create_venv(name, dir=None):
         dir = os.getcwd()
     mini_python_exe = os.path.join(dir, 'python', 'python.exe')
     lenv_path = get_env_path(name, dir)
+    modify_venv_cfg(env_dir=lenv_path)
     ok = False
     if os.path.exists(lenv_path):
         logger.info(f'venv already exists: {lenv_path}')
@@ -181,7 +185,7 @@ def create_venv(name, dir=None):
         result = subprocess.run([mini_python_exe, '-m', 'venv', lenv_path], check=True, capture_output=True, text=True)
         logger.info(f"Virtual environment {lenv_path} created successfully.")
         logger.info(result.stdout)
-    modify_venv_cfg(env_dir=lenv_path)
+        modify_venv_cfg(env_dir=lenv_path)
     logger.info('modify venv.cfg done')
     return lenv_path
 
@@ -200,10 +204,4 @@ def kill_exe(relative_path):
 if __name__ == '__main__':
     print(find_line_in_requirements('requirements.txt', 'ok-script'))
     delete_files(
-        ['opencv_videoio_ffmpeg', 'opengl32sw.dll', 'Qt6Quick.dll', 'Qt6Pdf.dll', 'Qt6Qml.dll', 'Qt6OpenGL.dll',
-         'Qt6OpenGL.pyd', '*.chm', '*.pdf', 'QtOpenGL.pyd',
-         'Qt6Network.dll', 'Qt6QmlModels.dll', 'Qt6VirtualKeyboard.dll', 'QtNetwork.pyd',
-         'Qt6Designer.dll'
-            , 'openvino_pytorch_frontend.dll', 'openvino_tensorflow_frontend.dll', 'NEWS.txt',
-         'py_tensorflow_frontend.cp311-win_amd64.pyd', 'py_pytorch_frontend.cp311-win_amd64.pyd',
-         '*.exe'], ['adb.exe', 't64.exe'], 'python-launcher-lib')
+        os.path.join('python', 'app_env'))

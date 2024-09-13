@@ -1,31 +1,28 @@
 from PySide6.QtCore import QCoreApplication
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QColor
 from PySide6.QtWidgets import QVBoxLayout
 from qfluentwidgets import SplitTitleBar
 
 from ok.gui.Communicate import communicate
-from ok.gui.common.config import isWin11
 from ok.gui.common.style_sheet import StyleSheet
 from ok.gui.debug.LogWindow import LogWindow
 from ok.gui.launcher.DownloadBar import DownloadBar
 from ok.gui.launcher.RunBar import RunBar
 from ok.gui.launcher.UpdateBar import UpdateBar
 from ok.gui.util.app import show_info_bar
+from ok.gui.widget.BaseWindow import BaseWindow
 from ok.logging.Logger import get_logger
 from ok.util.path import get_path_relative_to_exe
 
 logger = get_logger(__name__)
 
-if isWin11():
-    from qframelesswindow import AcrylicWindow as Window
-else:
-    from qframelesswindow import FramelessWindow as Window
 
-
-class LauncherWindow(Window):
+class LauncherWindow(BaseWindow):
 
     def __init__(self, config, updater, exit_event):
         super().__init__()
+        self._lightBackgroundColor = QColor(240, 244, 249)
+        self._darkBackgroundColor = QColor(32, 32, 32)
         self.exit_event = exit_event
         self.updater = updater
         self.setTitleBar(SplitTitleBar(self))
@@ -52,6 +49,7 @@ class LauncherWindow(Window):
 
         self.setLayout(self.layout)
         communicate.notification.connect(self.show_notification)
+        # FluentStyleSheet.FLUENT_WINDOW.apply(self)
         StyleSheet.TAB.apply(self)
         # StyleSheet.MESSAGE_WINDOW.apply(self)
 

@@ -1,15 +1,17 @@
-import os.path
 import sys
 
-from ok.util.path import dir_checksum
+import os.path
+from ok.util.path import dir_checksum, delete_if_exists
 
 
 def write_checksum_to_file(folder_path):
     # Call the dir_checksum function
+    file = os.path.join(folder_path, 'md5.txt')
+    delete_if_exists(file)
     checksum = dir_checksum(folder_path)
 
     # Write the checksum to a file named 'md5.txt' in the same folder
-    file = os.path.join(folder_path, 'md5.txt')
+
     with open(file, 'w') as file:
         file.write(checksum)
     print(f'write checksum {checksum} to {file}')

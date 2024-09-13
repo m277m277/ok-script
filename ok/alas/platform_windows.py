@@ -55,7 +55,7 @@ def execute(game_path: str):
     if os.path.exists(game_path):
         try:
             subprocess.Popen(game_path, cwd=os.path.dirname(game_path),
-                             creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS,
+                             creationflags=subprocess.CREATE_NO_WINDOW,
                              close_fds=True)
             return True
         except Exception as e:

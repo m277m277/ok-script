@@ -1,9 +1,10 @@
+import sys
+import time
+
 import hashlib
 import os
 import re
 import shutil
-import sys
-import time
 
 
 def get_path_relative_to_exe(*files):
@@ -91,7 +92,10 @@ def ensure_dir(directory, clear=False):
 
 def delete_if_exists(file_path):
     if os.path.exists(file_path):
-        shutil.rmtree(file_path, onerror=handle_remove_error)
+        if os.path.isdir(file_path):
+            shutil.rmtree(file_path, onerror=handle_remove_error)
+        else:
+            os.remove(file_path)
 
 
 def delete_folders_starts_with(path, starts_with):
