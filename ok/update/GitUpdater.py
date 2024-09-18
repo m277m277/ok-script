@@ -261,7 +261,7 @@ class GitUpdater:
                         continue
                 validated.append(profile)
             self.launch_profiles = validated
-            if self.launcher_config.get('profile_index', 0) > len(self.launch_profiles):
+            if self.launcher_config.get('profile_index', 0) >= len(self.launch_profiles):
                 self.launcher_config['profile_index'] = 0
             self.cuda_version = my_cuda or "No"
             communicate.cuda_version.emit(self.cuda_version)
@@ -282,8 +282,6 @@ class GitUpdater:
                 if env == 'launcher_env':
                     split_strings = dependency.split()
                     dependency = next((s for s in split_strings if "ok-script" in s), None)
-                    if not dependency:
-                        continue
                     logger.info(f'found ok-script version in launcher.json {dependency}')
                 to_install.append(dependency)
                 to_check += parse_package_names(dependency)

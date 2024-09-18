@@ -97,7 +97,7 @@ def clean_packages(to_install, pip_command):
                                               pip_command=[r'python\app_env\Scripts\python.exe', '-m', 'pip'])
 
     package_to_parents = build_reverse_map(dependency_map)
-    print(package_to_parents)
+
     to_uninstall = []
     for installed_package in installed_packages:
         if not is_required_by(installed_package, package_to_parents, to_install):
@@ -130,8 +130,9 @@ def build_reverse_map(dependency_map):
 
 def is_required_by(package, package_to_parents, to_install):
     visited = set()
-    if package in to_install:
-        return True
+    for to_i in to_install:
+        if package in to_i:
+            return True
     if package not in package_to_parents:
         return False
     if len(package_to_parents[package]) == 0:

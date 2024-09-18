@@ -1,7 +1,8 @@
 import sys
 
-import json
 import os.path
+
+import json
 from ok.logging.Logger import config_logger, get_logger
 from ok.update.init_launcher_env import create_app_env
 from ok.util.path import delete_if_exists
