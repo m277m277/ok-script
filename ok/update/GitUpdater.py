@@ -15,7 +15,6 @@ from functools import cmp_to_key
 from ok.config.Config import Config
 from ok.gui.Communicate import communicate
 from ok.gui.util.Alert import alert_error, alert_info
-from ok.gui.util.pip_util import parse_package_names, clean_packages
 from ok.logging.LogTailer import LogTailer
 from ok.logging.Logger import get_logger
 from ok.update.DownloadMonitor import DownloadMonitor
@@ -65,7 +64,7 @@ class GitUpdater:
         self.handler.post(self.do_update_launcher, 1)
 
     def do_update_launcher(self):
-        logger.info(f'do_update_launcher')
+        logger.info(f'do_update_launcher start')
         self.set_start_success()
         self.kill_launcher()
         if self.app_config.get('version') != self.launcher_config.get('launcher_version'):
@@ -75,10 +74,13 @@ class GitUpdater:
                 logger.debug('update launcher_env dependencies success')
                 self.launcher_config['launcher_version'] = self.app_config.get('version')
             copy_exe_files(os.path.join('repo', self.launcher_config['launcher_version']), os.getcwd())
-        delete_if_exists('_internal')
-        delete_if_exists('updates')
-        clean_repo('repo', [self.app_config.get('version'), self.launcher_config['launcher_version'],
-                            self.launcher_config['app_version']])
+            delete_if_exists('_internal')
+            delete_if_exists('updates')
+            clean_repo('repo', [self.app_config.get('version'), self.launcher_config['launcher_version'],
+                                self.launcher_config['app_version']])
+            logger.info(f'do_update_launcher success')
+        else:
+            logger.info(f'no need to update launcher version {self.launcher_config.get("launcher_version")}')
 
     def kill_launcher(self):
         try:
@@ -270,13 +272,10 @@ class GitUpdater:
 
     def install_dependencies(self, env):
         env_path = create_venv(env)
-        app_env_python_exe = os.path.join(env_path, 'Scripts', 'python.exe')
-        pip_command = [app_env_python_exe, "-m", "pip"]
         profile = self.get_current_profile()
         logger.info(f'installing dependencies for {profile.get("profile_name")}')
         if profile:
             to_install = []
-            to_check = []
             for dependency in profile['install_dependencies']:
                 if env == 'launcher_env':
                     split_strings = dependency.split()
@@ -285,10 +284,7 @@ class GitUpdater:
                         continue
                     logger.info(f'found ok-script version in launcher.json {dependency}')
                 to_install.append(dependency)
-                to_check += parse_package_names(dependency)
             delete_folders_starts_with(os.path.join(env_path, 'Lib', 'site-packages'), '~')
-            if env != 'launcher_env':
-                clean_packages(to_check, pip_command)
             if target_size := self.get_current_profile().get('target_size') and env != 'launcher_env':
                 if not self.download_monitor:
                     self.download_monitor = DownloadMonitor(get_env_path('app_env'), target_size, self.exit_event)
