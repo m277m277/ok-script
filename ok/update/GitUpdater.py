@@ -74,7 +74,6 @@ class GitUpdater:
             if self.install_dependencies('launcher_env'):
                 logger.debug('update launcher_env dependencies success')
                 self.launcher_config['launcher_version'] = self.app_config.get('version')
-
             copy_exe_files(os.path.join('repo', self.launcher_config['launcher_version']), os.getcwd())
         delete_if_exists('_internal')
         delete_if_exists('updates')
@@ -282,12 +281,15 @@ class GitUpdater:
                 if env == 'launcher_env':
                     split_strings = dependency.split()
                     dependency = next((s for s in split_strings if "ok-script" in s), None)
+                    if not dependency:
+                        continue
                     logger.info(f'found ok-script version in launcher.json {dependency}')
                 to_install.append(dependency)
                 to_check += parse_package_names(dependency)
             delete_folders_starts_with(os.path.join(env_path, 'Lib', 'site-packages'), '~')
-            clean_packages(to_check, pip_command)
-            if target_size := self.get_current_profile().get('target_size'):
+            if env != 'launcher_env':
+                clean_packages(to_check, pip_command)
+            if target_size := self.get_current_profile().get('target_size') and env != 'launcher_env':
                 if not self.download_monitor:
                     self.download_monitor = DownloadMonitor(get_env_path('app_env'), target_size, self.exit_event)
                 else:
