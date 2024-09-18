@@ -604,12 +604,13 @@ def copy_exe_files(folder1, folder2):
 
     # Iterate through the files in the source folder
     try:
-        for file_name in os.listdir(folder1):
-            if file_name.endswith('.exe'):
-                source_file = os.path.join(folder1, file_name)
-                destination_file = os.path.join(folder2, file_name)
-                shutil.copy2(source_file, destination_file)
-                logger.info(f'Copied {source_file} to {destination_file}')
+        if os.path.isdir(folder1):
+            for file_name in os.listdir(folder1):
+                if file_name.endswith('.exe'):
+                    source_file = os.path.join(folder1, file_name)
+                    destination_file = os.path.join(folder2, file_name)
+                    shutil.copy2(source_file, destination_file)
+                    logger.info(f'Copied {source_file} to {destination_file}')
     except Exception as e:
         logger.error(f'copy_exe_files error', e)
 

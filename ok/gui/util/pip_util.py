@@ -47,8 +47,7 @@ def get_package_dependencies(packages, pip_command):
     try:
         packages = list(packages)
         output = subprocess.check_output(pip_command + ['show'] + packages, stderr=subprocess.STDOUT,
-                                         universal_newlines=True, encoding='utf-8')
-
+                                         universal_newlines=True, encoding='utf-8', errors='replace')
         dependencies = {}
         current_package = None
         for line in output.splitlines():
