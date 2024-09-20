@@ -31,6 +31,8 @@ if __name__ == "__main__":
 
         profile = launch_profiles[profile_index]
 
+        logger.info(f'package profile {profile_index} {profile}')
+
         delete_if_exists(os.path.join(build_dir, 'python', 'app_env'))
 
         launcher_config_json = os.path.join(build_dir, 'configs', 'launcher.json')
@@ -57,7 +59,7 @@ if __name__ == "__main__":
                                     "ok.ocr.download_paddle_model"], cwd=build_dir)
                     break
 
-        logger.info(f'installed profile: {profile}')
+        logger.info(f'installed profile: {profile_index} {profile}')
 
     except Exception as e:
         logger.info(f'Error: {e}')
