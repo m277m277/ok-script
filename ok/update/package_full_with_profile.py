@@ -50,11 +50,12 @@ if __name__ == "__main__":
         if profile['install_dependencies']:
             for dependency in profile['install_dependencies']:
                 if "paddleocr" in dependency:
-                    app_env_python_exe = os.path.join(os.path.join(build_dir, 'python', 'app_env'), 'Scripts',
+                    app_env_python_exe = os.path.join(build_dir, 'python', 'app_env', 'Scripts',
                                                       'python.exe')
                     logger.info('start download paddle ocr model')
-                    subprocess.run([os.path.join(build_dir, 'python', 'app_env'), "-m",
+                    subprocess.run([app_env_python_exe, "-m",
                                     "ok.ocr.download_paddle_model"], cwd=build_dir)
+                    break
 
         logger.info(f'installed profile: {profile}')
 
