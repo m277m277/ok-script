@@ -6,7 +6,6 @@ from qfluentwidgets import SplitTitleBar
 from ok.gui.Communicate import communicate
 from ok.gui.common.style_sheet import StyleSheet
 from ok.gui.debug.LogWindow import LogWindow
-from ok.gui.launcher.DownloadBar import DownloadBar
 from ok.gui.launcher.RunBar import RunBar
 from ok.gui.launcher.UpdateBar import UpdateBar
 from ok.gui.util.app import show_info_bar
@@ -37,9 +36,6 @@ class LauncherWindow(BaseWindow):
         self.log_window = LogWindow(floating=False)
 
         self.layout.addWidget(self.log_window)
-
-        self.download_bar = DownloadBar()
-        self.layout.addWidget(self.download_bar)
 
         self.install_bar = UpdateBar(config, self.updater)
         self.layout.addWidget(self.install_bar)

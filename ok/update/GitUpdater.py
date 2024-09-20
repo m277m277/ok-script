@@ -289,12 +289,14 @@ class GitUpdater:
                     logger.info(f'found ok-script version in launcher.json {dependency}')
                 to_install.append(dependency)
             delete_folders_starts_with(os.path.join(env_path, 'Lib', 'site-packages'), '~')
-            if target_size := self.get_current_profile().get('target_size') and env != 'launcher_env':
-                if not self.download_monitor:
-                    self.download_monitor = DownloadMonitor(get_env_path('app_env'), target_size, self.exit_event)
-                else:
-                    self.download_monitor.target_size = target_size
+            if self.get_current_profile().get('target_size') and env != 'launcher_env':
+                if self.download_monitor:
+                    self.download_monitor.stop_monitoring()
+                target_size = self.get_current_profile().get('target_size')
+                self.download_monitor = DownloadMonitor(get_env_path('app_env'), target_size, self.exit_event)
+                self.download_monitor.target_size = target_size
                 self.download_monitor.start_monitoring()
+                logger.info(f'download monitor started')
             for dependency in to_install:
                 if not self.install_package(dependency, env_path):
                     logger.error(f'failed to install {dependency}')

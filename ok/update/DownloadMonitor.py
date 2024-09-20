@@ -1,10 +1,13 @@
 import math
-import re
-import threading
 import time
 
+import re
+import threading
 from ok.gui.Communicate import communicate
+from ok.logging.Logger import get_logger
 from ok.util.path import get_folder_size
+
+logger = get_logger(__name__)
 
 
 class DownloadMonitor(threading.Thread):
@@ -35,11 +38,15 @@ class DownloadMonitor(threading.Thread):
 
         communicate.update_download_percent.emit(True, convert_size(total_size),
                                                  convert_size(self.target_size), percent)
-        if total_size == self.target_size:
+
+    def update_running(self, running):
+        if not running:
             self.stop_monitoring()
 
     def start_monitoring(self):
+        logger.info(f'Start monitoring {self.target_size} {convert_size(self.target_size)}')
         communicate.log.connect(self.handle_log)
+        communicate.update_running.connect(self.update_running)
         self.size_from_log = 0
         self.last_size = 0
         self.stop_event.clear()
@@ -48,6 +55,7 @@ class DownloadMonitor(threading.Thread):
     def stop_monitoring(self):
         communicate.update_download_percent.emit(False, 0, 0, 0)
         communicate.log.disconnect(self.handle_log)
+        communicate.update_running.disconnect(self.update_running)
         self.stop_event.set()
 
     def handle_log(self, level_no, message):

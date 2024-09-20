@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QSpacerItem, QSizePo
 from qfluentwidgets import PushButton, ComboBox, FluentIcon
 
 from ok.gui.Communicate import communicate
+from ok.gui.launcher.DownloadBar import DownloadBar
 from ok.gui.launcher.LinksBar import LinksBar
 from ok.logging.Logger import get_logger
 from ok.update.GitUpdater import GitUpdater, is_newer_or_eq_version
@@ -25,6 +26,9 @@ class UpdateBar(QWidget):
         if config.get('links'):
             self.links_bar = LinksBar(config)
             self.layout.addWidget(self.links_bar)
+
+        self.download_bar = DownloadBar()
+        self.layout.addWidget(self.download_bar)
 
         self.hbox_layout = QHBoxLayout()
         self.layout.addLayout(self.hbox_layout)
