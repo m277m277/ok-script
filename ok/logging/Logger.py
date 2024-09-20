@@ -1,9 +1,10 @@
+import sys
+
 import logging
 import os
-import sys
+import queue
 import traceback
-from logging.handlers import TimedRotatingFileHandler
-
+from logging.handlers import TimedRotatingFileHandler, QueueHandler, QueueListener
 from ok.util.path import ensure_dir_for_file, get_relative_path
 
 
@@ -63,23 +64,32 @@ def config_logger(config=None, name='ok-script'):
     logger_file = get_relative_path(os.path.join('logs', name + '.log'))
     ensure_dir_for_file(logger_file)
 
+    # Create a queue for log messages
+    log_queue = queue.Queue()
+
+    # Set up a queue handler
+    queue_handler = QueueHandler(log_queue)
+    auto_helper_logger.addHandler(queue_handler)
+
     # File handler with rotation
     file_handler = TimedRotatingFileHandler(logger_file, when="midnight", interval=1,
                                             backupCount=7, encoding='utf-8')
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.DEBUG)  # File handler level
-    auto_helper_logger.addHandler(file_handler)
 
     error_log_file = get_relative_path(os.path.join('logs', name + '_error.log'))
     ensure_dir_for_file(error_log_file)
 
     os.makedirs("logs", exist_ok=True)
     # File handler with rotation
-    file_handler = TimedRotatingFileHandler(error_log_file, when="midnight", interval=1,
-                                            backupCount=7, encoding='utf-8')
-    file_handler.setFormatter(formatter)
-    file_handler.setLevel(logging.ERROR)  # File handler level
-    auto_helper_logger.addHandler(file_handler)
+    error_file_handler = TimedRotatingFileHandler(error_log_file, when="midnight", interval=1,
+                                                  backupCount=7, encoding='utf-8')
+    error_file_handler.setFormatter(formatter)
+    error_file_handler.setLevel(logging.ERROR)  # File handler level
+
+    # Set up a queue listener
+    listener = QueueListener(log_queue, file_handler, error_file_handler)
+    listener.start()
 
     sys.excepthook = log_exception_handler
 
