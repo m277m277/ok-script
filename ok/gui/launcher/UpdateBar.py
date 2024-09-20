@@ -1,8 +1,9 @@
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QSpacerItem, QSizePolicy, QVBoxLayout
-from qfluentwidgets import PushButton, ComboBox
+from qfluentwidgets import PushButton, ComboBox, FluentIcon
 
 from ok.gui.Communicate import communicate
+from ok.gui.launcher.LinksBar import LinksBar
 from ok.logging.Logger import get_logger
 from ok.update.GitUpdater import GitUpdater, is_newer_or_eq_version
 
@@ -21,6 +22,10 @@ class UpdateBar(QWidget):
         self.version_log_label.setWordWrap(True)
         self.layout.addWidget(self.version_log_label)
 
+        if config.get('links'):
+            self.links_bar = LinksBar(config)
+            self.layout.addWidget(self.links_bar)
+
         self.hbox_layout = QHBoxLayout()
         self.layout.addLayout(self.hbox_layout)
 
@@ -28,7 +33,7 @@ class UpdateBar(QWidget):
         self.hbox_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         self.hbox_layout.setSpacing(20)
 
-        self.delete_dependencies_button = PushButton(self.tr("Delete Downloaded Dependencies"))
+        self.delete_dependencies_button = PushButton(self.tr("Delete Downloaded Dependencies"), icon=FluentIcon.DELETE)
         self.delete_dependencies_button.clicked.connect(self.updater.clear_dependencies)
         self.hbox_layout.addWidget(self.delete_dependencies_button)
 
@@ -52,7 +57,7 @@ class UpdateBar(QWidget):
 
         self.update_sources.currentTextChanged.connect(self.update_source)
 
-        self.check_update_button = PushButton(self.tr("Check for Update"))
+        self.check_update_button = PushButton(self.tr("Check for Update"), icon=FluentIcon.SYNC)
         self.hbox_layout.addWidget(self.check_update_button)
         self.check_update_button.clicked.connect(self.updater.list_all_versions)
 
@@ -61,7 +66,7 @@ class UpdateBar(QWidget):
         self.hbox_layout.addWidget(self.version_list)
         self.version_list.currentTextChanged.connect(self.version_selection_changed)
 
-        self.update_button = PushButton(self.tr("Update"))
+        self.update_button = PushButton(self.tr("Update"), icon=FluentIcon.UP)
         self.update_button.clicked.connect(self.update_clicked)
         self.hbox_layout.addWidget(self.update_button)
 
@@ -80,8 +85,10 @@ class UpdateBar(QWidget):
     def version_selection_changed(self, text):
         if is_newer_or_eq_version(text, self.updater.launcher_config.get('app_version')) >= 0:
             self.update_button.setText(self.tr("Update"))
+            self.update_button.setIcon(icon=FluentIcon.UP)
         else:
             self.update_button.setText(self.tr("Downgrade"))
+            self.update_button.setIcon(icon=FluentIcon.DOWN)
         self.updater.version_selection_changed(text)
 
     def update_logs(self, logs):

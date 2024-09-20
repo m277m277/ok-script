@@ -1,8 +1,8 @@
 import sys
 
-import os.path
-
 import json
+import os.path
+import subprocess
 from ok.logging.Logger import config_logger, get_logger
 from ok.update.init_launcher_env import create_app_env
 from ok.util.path import delete_if_exists
@@ -46,6 +46,15 @@ if __name__ == "__main__":
         if not create_app_env(repo_dir, build_dir, profile['install_dependencies']):
             logger.error('not create app env')
             sys.exit(1)
+
+        if profile['install_dependencies']:
+            for dependency in profile['install_dependencies']:
+                if "paddleocr" in dependency:
+                    app_env_python_exe = os.path.join(os.path.join(build_dir, 'python', 'app_env'), 'Scripts',
+                                                      'python.exe')
+                    logger.info('start download paddle ocr model')
+                    subprocess.run([os.path.join(build_dir, 'python', 'app_env'), "-m",
+                                    "ok.ocr.download_paddle_model"], cwd=build_dir)
 
         logger.info(f'installed profile: {profile}')
 

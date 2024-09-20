@@ -38,6 +38,17 @@ def init_app_config():
     return app, locale
 
 
+def get_localized_app_config(config, key):
+    locale = cfg.get(cfg.language).value.name()
+
+    if config.get(locale):
+        config_dict = config.get(locale)
+    else:
+        config_dict = config.get('default')
+    if config_dict:
+        return config_dict.get(key)
+
+
 def show_info_bar(window, message, title=None, error=False):
     bar = InfoBar.error if error else InfoBar.info
     title = QCoreApplication.translate('app', title)

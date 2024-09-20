@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QSpacerItem, QSizePolicy
-from qfluentwidgets import PushButton, ComboBox
+from qfluentwidgets import ComboBox, PrimaryPushButton, FluentIcon
 
 from ok.gui.Communicate import communicate
 from ok.logging.Logger import get_logger
@@ -38,7 +38,7 @@ class RunBar(QWidget):
 
         communicate.launcher_profiles.connect(self.update_profile)
 
-        self.run_button = PushButton(self.tr("Start"))
+        self.run_button = PrimaryPushButton(self.tr("Start"), icon=FluentIcon.PLAY)
         self.run_button.setEnabled(False)
         self.run_button.clicked.connect(self.start_clicked)
         self.layout.addWidget(self.run_button, alignment=Qt.AlignRight, stretch=0)

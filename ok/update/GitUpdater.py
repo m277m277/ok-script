@@ -18,7 +18,7 @@ from ok.gui.util.Alert import alert_error, alert_info
 from ok.logging.LogTailer import LogTailer
 from ok.logging.Logger import get_logger
 from ok.update.DownloadMonitor import DownloadMonitor
-from ok.update.python_env import create_venv, find_line_in_requirements, get_env_path
+from ok.update.python_env import create_venv, find_line_in_requirements, get_env_path, modify_venv_cfg
 from ok.util.Handler import Handler
 from ok.util.path import get_relative_path, delete_if_exists, delete_folders_starts_with
 
@@ -114,6 +114,7 @@ class GitUpdater:
             self.list_all_versions()
 
     def start_app(self):
+        communicate.update_running.emit(True)
         try:
             if self.yanked or self.outdated:
                 alert_error(
@@ -140,8 +141,11 @@ class GitUpdater:
                     logger.error(f'could not find {script_path}')
                     alert_error(f'could not find {script_path}')
                     return False
+            python_folder_path = os.path.join('python', 'app_env')
+            modify_venv_cfg(python_folder_path)
 
             python_path = os.path.join('python', 'app_env', 'Scripts', 'python.exe')
+
             # Launch the script detached from the current process
             logger.info(f'launching {python_path} {script_path}')
             process = subprocess.Popen(
