@@ -1,11 +1,11 @@
 import time
-from typing import List
 
 from ok.color.Color import calculate_color_percentage
 from ok.config.ConfigOption import ConfigOption
 from ok.feature.Box import Box, find_box_by_name, relative_box
 from ok.feature.FeatureSet import adjust_coordinates
 from ok.gui.Communicate import communicate
+from typing import List
 
 
 class ExecutorOperation:
@@ -276,8 +276,10 @@ class ExecutorOperation:
         self.executor.interaction.send_key_up(key)
 
     def wait_until(self, condition, time_out=0, pre_action=None, post_action=None, wait_until_before_delay=-1,
+                   wait_until_check_delay=-1,
                    raise_if_not_found=False):
         return self.executor.wait_condition(condition, time_out, pre_action, post_action, wait_until_before_delay,
+                                            wait_until_check_delay,
                                             raise_if_not_found=raise_if_not_found)
 
     def wait_click_box(self, condition, time_out=0, pre_action=None, post_action=None, raise_if_not_found=False):

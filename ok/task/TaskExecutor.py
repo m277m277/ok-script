@@ -208,9 +208,12 @@ class TaskExecutor:
             self.pause_end_time += self.pause_start - time.time()
 
     def wait_condition(self, condition, time_out=0, pre_action=None, post_action=None, wait_until_before_delay=-1,
+                       wait_until_check_delay=-1,
                        raise_if_not_found=False):
         if wait_until_before_delay == -1:
             wait_until_before_delay = self.wait_until_before_delay
+        if wait_until_check_delay == -1:
+            wait_until_check_delay = self.wait_until_check_delay
         if wait_until_before_delay > 0:
             self.reset_scene()
         start = time.time()
@@ -232,7 +235,7 @@ class TaskExecutor:
             if time.time() - start > time_out:
                 logger.info(f"wait_until timeout {condition} {time_out} seconds")
                 break
-            self.sleep(self.wait_until_check_delay)
+            self.sleep(wait_until_check_delay)
         if raise_if_not_found:
             raise WaitFailedException()
         return None

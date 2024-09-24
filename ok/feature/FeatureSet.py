@@ -1,20 +1,20 @@
-import json
 import math
-import os
-import threading
-from typing import Dict
-from typing import List
 
 import cv2
 import numpy as np
 from PIL import Image
 
+import json
+import os
+import threading
 from ok.color.Color import rgb_to_gray
 from ok.feature.Box import Box, sort_boxes
 from ok.feature.Feature import Feature
 from ok.gui.Communicate import communicate
 from ok.logging.Logger import get_logger
 from ok.util.path import get_path_relative_to_exe
+from typing import Dict
+from typing import List
 
 logger = get_logger(__name__)
 
@@ -111,17 +111,6 @@ class FeatureSet:
 
             # Save the image
             cv2.imwrite(file_path, image.mat)
-
-    # def find_one(self, mat: np.ndarray, category_name: str, horizontal_variance: float = 0,
-    #              vertical_variance: float = 0,
-    #              threshold=0, use_gray_scale=False, canny_lower=0, canny_higher=0) -> Box:
-    #     boxes = self.find_feature(mat, category_name, horizontal_variance=horizontal_variance,
-    #                               vertical_variance=vertical_variance, threshold=threshold,
-    #                               use_gray_scale=use_gray_scale, canny_lower=canny_lower, canny_higher=canny_higher)
-    #     if len(boxes) > 1:
-    #         logger.warning(f"find_one:found too many {len(boxes)} return first", file=sys.stderr)
-    #     if len(boxes) >= 1:
-    #         return boxes[0]
 
     def get_feature_by_name(self, name):
         return self.feature_dict.get(name)
