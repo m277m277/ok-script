@@ -80,6 +80,9 @@ class PostMessageInteraction(BaseInteraction):
         # Send the WM_MOUSEWHEEL message
         self.post(win32con.WM_MOUSEWHEEL, wParam, long_position)
 
+    def before_run(self):
+        self.activate()
+
     def post(self, message, wParam=0, lParam=0):
         win32gui.PostMessage(self.hwnd, message, wParam, lParam)
 
