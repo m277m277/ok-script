@@ -19,6 +19,7 @@ class PostMessageInteraction(BaseInteraction):
         self.hwnd_window = hwnd_window
         self.mouse_pos = (0, 0)
         communicate.window.connect(self.hwnd_visibility_changed)
+        self.hwnd_visibility_changed(self.hwnd_window.visible, None, None, None, None, None, None, None)
 
     def hwnd_visibility_changed(self, visible, x, y, window_width, window_height, width, height, scaling):
         if not visible:
