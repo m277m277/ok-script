@@ -6,6 +6,7 @@ from PIL import Image
 
 import json
 import os
+import re
 import threading
 from ok.color.Color import rgb_to_gray
 from ok.feature.Box import Box, sort_boxes
@@ -232,8 +233,7 @@ def read_from_json(coco_json, width=-1, height=-1):
     box_dict = {}
     ok_compressed = None
     load_success = True
-    with open(coco_json, 'r') as file:
-        data = json.load(file)
+    data = load_json(coco_json)
     coco_folder = os.path.dirname(coco_json)
 
     # Create a map from image ID to file name
@@ -252,7 +252,7 @@ def read_from_json(coco_json, width=-1, height=-1):
         if whole_image is None:
             load_success = False
             logger.error(f'Could not read image {image_path}')
-            continue
+            raise ValueError(f'Could not read image {image_path}')
         _, original_width = whole_image.shape[:2]
         image_height, image_width = whole_image.shape[:2]
 
@@ -288,6 +288,25 @@ def read_from_json(coco_json, width=-1, height=-1):
             box_dict[category_name] = Box(x, y, image.shape[1], image.shape[0], name=category_name)
 
     return feature_dict, box_dict, ok_compressed, load_success
+
+
+def load_json(coco_json):
+    with open(coco_json, 'r') as file:
+        data = json.load(file)
+        for images in data['images']:
+            images['file_name'] = un_fk_label_studio_path(images['file_name'])
+        return data
+
+
+def un_fk_label_studio_path(path):
+    # Check if the path is an absolute path
+    if os.path.isabs(path):
+        # Check if the path contains the "images" folder
+        match = re.search(r'\\(images\\.*\.(jpg|png)$)', path)
+        if match:
+            # Extract the "images\\*.jpg" part
+            return match.group(1).replace("images\\", "images/")
+    return path
 
 
 def adjust_coordinates(x, y, w, h, screen_width, screen_height, image_width, image_height, hcenter=False):

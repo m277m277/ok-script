@@ -4,6 +4,7 @@ import win32api
 import win32gui
 
 from ok.capture.BaseCaptureMethod import BaseCaptureMethod
+from ok.gui.Communicate import communicate
 from ok.interaction.BaseInteraction import BaseInteraction
 from ok.logging.Logger import get_logger
 
@@ -17,6 +18,11 @@ class PostMessageInteraction(BaseInteraction):
         super().__init__(capture)
         self.hwnd_window = hwnd_window
         self.mouse_pos = (0, 0)
+        communicate.window.connect(self.hwnd_visibility_changed)
+
+    def hwnd_visibility_changed(self, visible, x, y, window_width, window_height, width, height, scaling):
+        if not visible:
+            self.activate()
 
     @property
     def hwnd(self):
@@ -132,8 +138,8 @@ class PostMessageInteraction(BaseInteraction):
         self.post(action, btn, long_position)
 
     def update_mouse_pos(self, x, y, activate=True):
-        if activate:
-            self.activate()
+        # if activate:
+        #     self.activate()
         if x == -1 or y == -1:
             x, y = self.mouse_pos
         else:
