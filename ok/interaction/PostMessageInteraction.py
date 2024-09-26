@@ -20,6 +20,8 @@ class PostMessageInteraction(BaseInteraction):
         self.mouse_pos = (0, 0)
         communicate.window.connect(self.hwnd_visibility_changed)
         self.hwnd_visibility_changed(self.hwnd_window.visible, None, None, None, None, None, None, None)
+        self.last_activate = 0
+        self.activate_interval = 1
 
     def hwnd_visibility_changed(self, visible, x, y, window_width, window_height, width, height, scaling):
         if not visible:
@@ -36,6 +38,7 @@ class PostMessageInteraction(BaseInteraction):
         self.send_key_up(key)
 
     def send_key_down(self, key):
+        self.try_activate()
         # logger.debug(f'send_key_down {key}')
         vk_code = self.get_key_by_str(key)
         self.post(win32con.WM_KEYDOWN, vk_code, 0)
@@ -56,7 +59,6 @@ class PostMessageInteraction(BaseInteraction):
     def move(self, x, y, down_btn=0):
         long_pos = self.update_mouse_pos(x, y, True)
         self.post(win32con.WM_MOUSEMOVE, down_btn, long_pos)
-        # logger.debug(f'move {x, y}')
 
     def middle_click(self, x=-1, y=-1, move_back=False, name=None, down_time=0.01):
         super().middle_click(x, y, move_back, name, down_time)
@@ -116,6 +118,11 @@ class PostMessageInteraction(BaseInteraction):
     def activate(self):
         self.post(win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
 
+    def try_activate(self):
+        if time.time() - self.last_activate > self.activate_interval:
+            self.last_activate = time.time()
+            self.activate()
+
     def click(self, x=-1, y=-1, move_back=False, name=None, down_time=0.01, move=True):
         super().click(x, y, name=name)
         if move:
@@ -142,8 +149,7 @@ class PostMessageInteraction(BaseInteraction):
         self.post(action, btn, long_position)
 
     def update_mouse_pos(self, x, y, activate=True):
-        # if activate:
-        #     self.activate()
+        self.try_activate()
         if x == -1 or y == -1:
             x, y = self.mouse_pos
         else:
