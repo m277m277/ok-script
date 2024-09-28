@@ -1,5 +1,3 @@
-import os
-
 from PySide6.QtCore import QObject, Signal, Qt, QEvent
 from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 from qfluentwidgets import FluentIcon, NavigationItemPosition, MSFluentWindow, InfoBar, InfoBarPosition
@@ -55,7 +53,7 @@ class MainWindow(MSFluentWindow):
                                  position=NavigationItemPosition.BOTTOM)
 
         if about:
-            self.about_tab = AboutTab(icon, title, version, debug, about)
+            self.about_tab = AboutTab(config)
             self.addSubInterface(self.about_tab, FluentIcon.QUESTION, self.tr('About'),
                                  position=NavigationItemPosition.BOTTOM)
         else:

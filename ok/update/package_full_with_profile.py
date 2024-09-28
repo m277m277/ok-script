@@ -1,7 +1,8 @@
 import sys
 
-import json
 import os.path
+
+import json
 import subprocess
 from ok.logging.Logger import config_logger, get_logger
 from ok.update.init_launcher_env import create_app_env
@@ -39,7 +40,6 @@ if __name__ == "__main__":
 
         with open(launcher_config_json, 'r', encoding='utf-8') as file:
             config = json.load(file)
-            config['app_dependencies_installed'] = True
             config['profile_index'] = profile_index
 
         with open(launcher_config_json, 'w', encoding='utf-8') as file:

@@ -1,15 +1,15 @@
 import sys
-import threading
 import time
-from typing import Dict, Any
 
 from PySide6.QtWidgets import QApplication
 
 import ok
+import threading
 from ok.logging.Logger import get_logger, config_logger
 from ok.util.exit_event import ExitEvent
 from ok.util.path import install_path_isascii
 from ok.util.win32_process import check_mutex
+from typing import Dict, Any
 
 logger = get_logger(__name__)
 
@@ -103,7 +103,7 @@ class OK:
                 self.quit()
 
     def do_init(self):
-        logger.info(f"initializing {self.__class__.__name__}, config: {self.config}")
+        logger.info(f"do_init, config: {self.config}")
 
         template_matching = self.config.get('template_matching')
         if template_matching is not None:
@@ -127,13 +127,14 @@ class OK:
                                           global_config=self.global_config)
 
         ok.gui.executor = self.task_executor
-        if self.config.get('ocr'):
+        if ocr := self.config.get('ocr'):
+            logger.info(f'init ocr {ocr}')
             isascii, path = install_path_isascii()
             if not isascii:
                 self.app.show_path_ascii_error(path)
                 self.init_error = True
                 return False
-            if self.config.get('ocr').get('lib') == 'paddleocr':
+            if ocr.get('lib') == 'paddleocr':
                 logger.info('use paddleocr as ocr lib')
                 from paddleocr import PaddleOCR
                 import os
@@ -156,7 +157,7 @@ class OK:
         if not check_mutex():
             self.init_error = True
             self.app.show_already_running_error()
-
+        logger.info(f"do_init, end")
         return True
 
     def wait_task(self):
@@ -186,9 +187,6 @@ class OK:
     def quit(self):
         logger.debug('quit app')
         self.exit_event.set()
-        if self.app:
-            self.app.quit()
-        sys.exit(9)
 
     def init_device_manager(self):
         if self.device_manager is None:

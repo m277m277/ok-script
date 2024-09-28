@@ -274,11 +274,53 @@ class GitUpdater:
         else:
             logger.error(f'read launcher config failed')
 
+    def uninstall_dependencies(self, app_env_path, to_uninstall):
+        logger.info(f'uninstalling dependencies {to_uninstall}')
+        try:
+            # Run pip install command
+            app_env_python_exe = os.path.join(app_env_path, 'Scripts', 'python.exe')
+            params = [app_env_python_exe, "-m", "pip", "uninstall"] + to_uninstall.split() + ['-y']
+            logger.info(f'executing pip uninstall with: {params}')
+            process = subprocess.Popen(
+                params,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                creationflags=subprocess.CREATE_NO_WINDOW
+            )
+
+            # Print the stdout and stderr in real-time
+            while True:
+                output = process.stdout.readline()
+                if output == '' and process.poll() is not None:
+                    break
+                if output:
+                    logger.info(output.strip())
+
+            # Print any remaining stderr
+            stderr = process.communicate()[1]
+            if stderr:
+                logger.error(stderr.strip())
+
+            # Check if the installation was successful
+            if process.returncode == 0:
+                logger.info(f"Packages uninstalled successfully.")
+                return True
+            else:
+                logger.error(f"Failed to uninstall packages")
+                alert_error(f'Failed to uninstall packages.')
+                return
+        except Exception as e:
+            logger.error(f"An error occurred: {e}")
+
     def install_dependencies(self, env):
         env_path = create_venv(env)
         profile = self.get_current_profile()
         logger.info(f'installing dependencies for {profile.get("profile_name")}')
         if profile:
+            to_uninstall = profile.get('uninstall_dependencies')
+            if to_uninstall:
+                self.uninstall_dependencies(env_path, to_uninstall)
             to_install = []
             for dependency in profile['install_dependencies']:
                 if env == 'launcher_env':

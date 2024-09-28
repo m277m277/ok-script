@@ -1,9 +1,9 @@
-import gettext
 import sys
 
 from PySide6.QtCore import QSize, QCoreApplication
 from PySide6.QtGui import QIcon
 
+import gettext
 import ok
 from ok.analytics.Analytics import Analytics
 from ok.gui.Communicate import communicate
@@ -138,7 +138,3 @@ class App:
 
     def exec(self):
         sys.exit(self.app.exec())
-
-    @staticmethod
-    def quit():
-        communicate.quit.emit()

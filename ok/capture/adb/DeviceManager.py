@@ -1,9 +1,8 @@
-import os
-import threading
-
 import cv2
 import numpy as np
 
+import os
+import threading
 from ok.alas.platform_windows import get_emulator_exe
 from ok.capture.HwndWindow import HwndWindow, find_hwnd
 from ok.capture.adb.ADBCaptureMethod import ADBCaptureMethod
@@ -20,6 +19,7 @@ logger = get_logger(__name__)
 class DeviceManager:
 
     def __init__(self, app_config, exit_event=None, global_config=None):
+        logger.info('__init__ start')
         self._device = None
         self._adb = None
         self.global_config = global_config
@@ -52,6 +52,7 @@ class DeviceManager:
         self.capture_method = None
         self.handler = Handler(exit_event, 'RefreshAdb')
         self.handler.post(self.do_refresh)
+        logger.info('__init__ end')
 
     def refresh(self):
         logger.debug('calling refresh')
