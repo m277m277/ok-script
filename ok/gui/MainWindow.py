@@ -106,8 +106,8 @@ class MainWindow(MSFluentWindow):
             self.switchTo(self.start_tab)
             alert_error(error, True)
         if done:
-            self.emulator_starting_dialog.close()
-            return
+            if self.emulator_starting_dialog:
+                self.emulator_starting_dialog.close()
         else:
             if self.emulator_starting_dialog is None:
                 self.emulator_starting_dialog = StartLoadingDialog(seconds_left,

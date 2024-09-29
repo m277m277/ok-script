@@ -1,6 +1,4 @@
 # original https://github.com/dantmnf & https://github.com/hakaboom/winAuto
-import re
-import threading
 import time
 
 import psutil
@@ -10,6 +8,8 @@ from qfluentwidgets import FluentIcon
 from win32 import win32gui
 
 import ok.gui
+import re
+import threading
 from ok.capture.windows.window import is_foreground_window, get_window_bounds
 from ok.config.ConfigOption import ConfigOption
 from ok.gui.Communicate import communicate
@@ -90,6 +90,9 @@ class HwndWindow:
         while not self.app_exit_event.is_set() and not self.stop_event.is_set():
             self.do_update_window_size()
             time.sleep(0.2)
+        if self.hwnd and self.mute_option.get('Mute Game while in Background'):
+            logger.info(f'exit reset mute state to 0')
+            set_mute_state(self.hwnd, 0)
 
     def get_abs_cords(self, x, y):
         return self.x + x, self.y + y
@@ -255,6 +258,18 @@ def find_hwnd(title, exe_name, frame_width, frame_height, player_id=-1, class_na
         return biggest[6], biggest[0], biggest[1], x_offset, y_offset, real_width, real_height
 
     return None, None, None, 0, 0, 0, 0
+
+
+def get_mute_state(hwnd):
+    from pycaw.api.audioclient import ISimpleAudioVolume
+    from pycaw.utils import AudioUtilities
+    _, pid = win32process.GetWindowThreadProcessId(hwnd)
+    sessions = AudioUtilities.GetAllSessions()
+    for session in sessions:
+        if session.Process and session.Process.pid == pid:
+            volume = session._ctl.QueryInterface(ISimpleAudioVolume)
+            return volume.GetMute()
+    return 0
 
 
 # Function to get the mute state
