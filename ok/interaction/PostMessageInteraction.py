@@ -119,9 +119,9 @@ class PostMessageInteraction(BaseInteraction):
         self.post(win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
 
     def try_activate(self):
-        if time.time() - self.last_activate > self.activate_interval:
-            self.last_activate = time.time()
-            self.activate()
+        # if time.time() - self.last_activate > self.activate_interval:
+        #     self.last_activate = time.time()
+        self.activate()
 
     def click(self, x=-1, y=-1, move_back=False, name=None, down_time=0.01, move=True):
         super().click(x, y, name=name)
