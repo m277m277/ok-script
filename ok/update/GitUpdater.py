@@ -26,6 +26,8 @@ logger = get_logger(__name__)
 
 repo_path = get_relative_path(os.path.join('update', "repo"))
 
+os.environ['GIT_CEILING_DIRECTORIES'] = os.getcwd()
+
 
 class GitUpdater:
 
