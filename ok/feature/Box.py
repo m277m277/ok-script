@@ -1,4 +1,5 @@
 import math
+
 import random
 import re
 from functools import cmp_to_key
@@ -49,6 +50,26 @@ class Box:
         if self.name is not None:
             return f"Box(name='{self.name}', x={self.x}, y={self.y}, width={self.width}, height={self.height}, confidence={round(self.confidence * 100)})"
         return f"Box(x={self.x}, y={self.y}, width={self.width}, height={self.height}, confidence={round(self.confidence * 100)})"
+
+    def scale(self, width_ratio: float, height_ratio: float):
+        """
+        Expands the box by a relative ratio to its width and height while keeping the center position unchanged.
+
+        Parameters:
+        width_ratio (float): The ratio by which to expand the width.
+        height_ratio (float): The ratio by which to expand the height.
+        """
+        new_width = round(self.width * width_ratio)
+        new_height = round(self.height * height_ratio)
+        delta_width = new_width - self.width
+        delta_height = new_height - self.height
+
+        # Update the box dimensions while keeping the center position unchanged
+        self.x -= round(delta_width / 2)
+        self.y -= round(delta_height / 2)
+        self.width = new_width
+        self.height = new_height
+        return self
 
     def closest_distance(self, other):
         # Calculate the sides of the boxes
@@ -189,6 +210,19 @@ def find_box_by_name(boxes, names) -> Box:
                         break
 
     return result
+
+
+def get_bounding_box(boxes):
+    if not boxes:
+        raise ValueError("The list of boxes is empty")
+
+    min_x = min(box.x for box in boxes)
+    min_y = min(box.y for box in boxes)
+    max_x = max(box.x + box.width for box in boxes)
+    max_y = max(box.y + box.height for box in boxes)
+
+    bounding_box = Box(min_x, min_y, max_x - min_x, max_y - min_y)
+    return bounding_box
 
 
 def find_boxes_within_boundary(boxes, boundary_box):

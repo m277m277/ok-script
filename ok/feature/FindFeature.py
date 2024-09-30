@@ -1,7 +1,6 @@
-from typing import List
-
 from ok.feature.Box import Box, find_highest_confidence_box
 from ok.logging.Logger import get_logger
+from typing import List
 
 logger = get_logger(__name__)
 
@@ -73,11 +72,11 @@ class FindFeature:
 
     def find_one(self, feature_name, horizontal_variance=0, vertical_variance=0, threshold=0,
                  use_gray_scale=False, box=None, canny_lower=0, canny_higher=0, inverse_mask_color=None,
-                 frame_processor=None, mask_function=None) -> Box:
+                 frame_processor=None, template=None, mask_function=None) -> Box:
         boxes = self.find_feature(feature_name, horizontal_variance, vertical_variance, threshold,
                                   use_gray_scale=use_gray_scale, box=box, canny_lower=canny_lower,
                                   canny_higher=canny_higher, inverse_mask_color=inverse_mask_color,
-                                  frame_processor=frame_processor, mask_function=mask_function)
+                                  frame_processor=frame_processor, template=template, mask_function=mask_function)
         if len(boxes) > 0:
             if len(boxes) > 1:
                 logger.warning(f"find_one:found {feature_name} too many {len(boxes)}")
@@ -89,3 +88,20 @@ class FindFeature:
 
     def feature_exists(self, feature_name: str) -> bool:
         return self.feature_set.feature_exists(feature_name)
+
+    def find_best_match_in_box(self, box, to_find, threshold, use_gray_scale=False,
+                               canny_lower=0, canny_higher=0, inverse_mask_color=None,
+                               frame_processor=None, mask_function=None):
+        max_conf = 0
+        max_box = None
+        for feature_name in to_find:
+            feature = self.find_one(feature_name, box=box,
+                                    threshold=threshold, use_gray_scale=use_gray_scale,
+                                    canny_lower=canny_lower, canny_higher=canny_higher,
+                                    inverse_mask_color=inverse_mask_color,
+                                    frame_processor=frame_processor, mask_function=mask_function)
+            if feature and feature.confidence > max_conf:
+                max_conf = feature.confidence
+                max_box = feature
+        logger.info(f'find_best_match_in_box: {max_box} {max_conf}')
+        return max_box

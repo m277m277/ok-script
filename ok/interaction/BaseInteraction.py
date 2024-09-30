@@ -11,9 +11,6 @@ class BaseInteraction:
     def should_capture(self):
         return True
 
-    def before_run(self):
-        pass
-
     def send_key(self, key, down_time=0.02):
         logger.debug(f'Sending key {key}')
 

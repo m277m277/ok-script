@@ -58,11 +58,3 @@ class CheckBoxWidget(QWidget):
         for option in options:  # Example with 5 checkboxes
             checkbox = CheckBox(option)
             h_layout.addWidget(checkbox)
-
-
-def find_string_index(my_list, target_string):
-    try:
-        index = my_list.index(target_string)
-        return index
-    except ValueError:
-        return 0

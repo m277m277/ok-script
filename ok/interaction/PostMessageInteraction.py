@@ -4,7 +4,6 @@ import win32api
 import win32gui
 
 from ok.capture.BaseCaptureMethod import BaseCaptureMethod
-from ok.gui.Communicate import communicate
 from ok.interaction.BaseInteraction import BaseInteraction
 from ok.logging.Logger import get_logger
 
@@ -18,14 +17,8 @@ class PostMessageInteraction(BaseInteraction):
         super().__init__(capture)
         self.hwnd_window = hwnd_window
         self.mouse_pos = (0, 0)
-        communicate.window.connect(self.hwnd_visibility_changed)
-        self.hwnd_visibility_changed(self.hwnd_window.visible, None, None, None, None, None, None, None)
         self.last_activate = 0
         self.activate_interval = 1
-
-    def hwnd_visibility_changed(self, visible, x, y, window_width, window_height, width, height, scaling):
-        if not visible:
-            self.activate()
 
     @property
     def hwnd(self):
@@ -71,6 +64,7 @@ class PostMessageInteraction(BaseInteraction):
         )
 
     def scroll(self, x, y, scroll_amount):
+        self.activate()
         # Calculate the wParam
         # Positive scroll_amount indicates scroll up, negative is scroll down
         logger.debug(f'scroll {x}, {y}, {scroll_amount}')
@@ -81,9 +75,6 @@ class PostMessageInteraction(BaseInteraction):
         wParam = win32api.MAKELONG(0, win32con.WHEEL_DELTA * scroll_amount)
         # Send the WM_MOUSEWHEEL message
         self.post(win32con.WM_MOUSEWHEEL, wParam, long_position)
-
-    def before_run(self):
-        self.activate()
 
     def post(self, message, wParam=0, lParam=0):
         win32gui.PostMessage(self.hwnd, message, wParam, lParam)

@@ -208,6 +208,9 @@ class FeatureSet:
         if frame_processor is not None:
             search_area = frame_processor(search_area)
 
+        if feature.mat.shape[1] > search_area.shape[1] or feature.mat.shape[0] > search_area.shape[0]:
+            logger.error(f'feature template size greater than search area {feature.mat.shape} > {search_area.shape}')
+
         result = cv2.matchTemplate(search_area, feature.mat, cv2.TM_CCOEFF_NORMED, mask=feature.mask)
 
         # Define a threshold for acceptable matches
@@ -220,6 +223,7 @@ class FeatureSet:
             boxes.append(Box(x, y, feature_width, feature_height, confidence, category_name))
 
         boxes = sort_boxes(boxes)
+
         communicate.emit_draw_box(category_name, boxes, "red")
         search_name = "search_" + category_name
         communicate.emit_draw_box(search_name,
@@ -379,3 +383,18 @@ def filter_and_sort_matches(result, threshold, w, h):
             selected_matches.append((match, confidence))
 
     return selected_matches
+
+
+def mask_white(image, lower_white=255):
+    # Check if the image is grayscale
+    if len(image.shape) == 2 or image.shape[2] == 1:
+        # Image is grayscale
+        lower_white = np.array([lower_white])
+        upper_white = np.array([255])
+    else:
+        # Image is in color
+        lower_white = np.array([lower_white, lower_white, lower_white])
+        upper_white = np.array([255, 255, 255])
+
+    # Create a mask for the white color
+    return cv2.inRange(image, lower_white, upper_white)

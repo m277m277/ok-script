@@ -7,3 +7,11 @@ def safe_get(lst, idx, default=None):
         return lst[idx]
     except IndexError:
         return default
+
+
+def find_index_in_list(my_list, target_string, default_index=-1):
+    try:
+        index = my_list.index(target_string)
+        return index
+    except ValueError:
+        return default_index

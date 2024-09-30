@@ -1,8 +1,4 @@
-import os
-import queue
-import threading
 import time
-from datetime import datetime
 
 import cv2
 from PIL import Image, ImageFont, ImageDraw
@@ -10,6 +6,10 @@ from PySide6.QtCore import QObject
 from PySide6.QtGui import QColor
 
 import ok.gui
+import os
+import queue
+import threading
+from datetime import datetime
 from ok.feature.Box import Box
 from ok.gui.Communicate import communicate
 from ok.logging.Logger import get_logger
@@ -71,6 +71,7 @@ class Screenshot(QObject):
             return
         if key is None:
             key = boxes[0].name
+        boxes = boxes[:10]
         timestamp = time.time()
         q_color = self.color_map.get(color, self.color_map.get("red"))
         self.remove_expired()

@@ -289,11 +289,9 @@ class TaskExecutor:
                     if cycled or self._frame is None:
                         self.next_frame()
                     if isinstance(task, TriggerTask):
-                        self.interaction.before_run()
                         self.current_task.run()
                     else:
                         prevent_sleeping(True)
-                        self.interaction.before_run()
                         self.current_task.run()
                         prevent_sleeping(False)
                         task.disable()
