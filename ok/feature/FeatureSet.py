@@ -209,7 +209,8 @@ class FeatureSet:
             search_area = frame_processor(search_area)
 
         if feature.mat.shape[1] > search_area.shape[1] or feature.mat.shape[0] > search_area.shape[0]:
-            logger.error(f'feature template size greater than search area {feature.mat.shape} > {search_area.shape}')
+            logger.error(
+                f'feature template {category_name} {box.name if box else ""} size greater than search area {feature.mat.shape} > {search_area.shape}')
 
         result = cv2.matchTemplate(search_area, feature.mat, cv2.TM_CCOEFF_NORMED, mask=feature.mask)
 

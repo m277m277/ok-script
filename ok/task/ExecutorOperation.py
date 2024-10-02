@@ -101,6 +101,10 @@ class ExecutorOperation:
         self.swipe(int(self.width * from_x), int(self.height * from_y), int(self.width * to_x),
                    int(self.height * to_y), duration)
 
+    @property
+    def hwnd(self):
+        return self.executor.device_manager.hwnd
+
     def scroll_relative(self, x, y, count):
         self.scroll(int(self.width * x), int(self.height * y), count)
 

@@ -63,13 +63,8 @@ class Box:
         new_height = round(self.height * height_ratio)
         delta_width = new_width - self.width
         delta_height = new_height - self.height
-
-        # Update the box dimensions while keeping the center position unchanged
-        self.x -= round(delta_width / 2)
-        self.y -= round(delta_height / 2)
-        self.width = new_width
-        self.height = new_height
-        return self
+        
+        return Box(self.x - round(delta_width / 2), self.y - round(delta_height / 2), new_width, new_height)
 
     def closest_distance(self, other):
         # Calculate the sides of the boxes

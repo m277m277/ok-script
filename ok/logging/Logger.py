@@ -119,8 +119,10 @@ class Logger:
 
 def exception_to_str(exception):
     if exception is not None:
-        traceback.print_exc()
-        stack_trace_str = traceback.format_exc()
+        try:
+            stack_trace_str = traceback.format_exc()
+        except Exception as e:
+            stack_trace_str = f"Error formatting exception: {e}"
     else:
         stack_trace_str = ""
     return stack_trace_str

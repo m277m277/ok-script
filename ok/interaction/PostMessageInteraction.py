@@ -64,7 +64,7 @@ class PostMessageInteraction(BaseInteraction):
         )
 
     def scroll(self, x, y, scroll_amount):
-        self.activate()
+        # self.activate()
         # Calculate the wParam
         # Positive scroll_amount indicates scroll up, negative is scroll down
         logger.debug(f'scroll {x}, {y}, {scroll_amount}')
