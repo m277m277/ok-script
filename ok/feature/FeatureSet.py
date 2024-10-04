@@ -116,10 +116,10 @@ class FeatureSet:
     def get_feature_by_name(self, name):
         return self.feature_dict.get(name)
 
-    def find_feature(self, mat: np.ndarray, category_name: str, horizontal_variance: float = 0,
-                     vertical_variance: float = 0, threshold: float = 0, use_gray_scale: bool = False, x=-1, y=-1,
-                     to_x=-1, to_y=-1, width=-1, height=-1, box=None, canny_lower=0, canny_higher=0,
-                     inverse_mask_color=None, frame_processor=None, template=None, mask_function=None) -> List[Box]:
+    def find_one_feature(self, mat: np.ndarray, category_name: str, horizontal_variance: float = 0,
+                         vertical_variance: float = 0, threshold: float = 0, use_gray_scale: bool = False, x=-1, y=-1,
+                         to_x=-1, to_y=-1, width=-1, height=-1, box=None, canny_lower=0, canny_higher=0,
+                         inverse_mask_color=None, frame_processor=None, template=None, mask_function=None) -> List[Box]:
         """
         Find a feature within a given variance.
 
@@ -231,6 +231,46 @@ class FeatureSet:
                                   Box(search_x1, search_y1, search_x2 - search_x1, search_y2 - search_y1,
                                       name=search_name), "blue")
         return boxes
+
+    def find_feature(self, mat: np.ndarray, category_name: str, horizontal_variance: float = 0,
+                     vertical_variance: float = 0, threshold: float = 0, use_gray_scale: bool = False, x=-1, y=-1,
+                     to_x=-1, to_y=-1, width=-1, height=-1, box=None, canny_lower=0, canny_higher=0,
+                     inverse_mask_color=None, frame_processor=None, template=None, mask_function=None) -> List[Box]:
+        """
+        Find a feature within a given variance.
+
+        Args:
+            mat (np.ndarray): The image in which to find the feature.
+            category_name (str): The category name of the feature to find.
+            horizontal_variance (float): Allowed horizontal variance as a percentage of width.
+            vertical_variance (float): Allowed vertical variance as a percentage of height.
+            threshold (float): Allowed confidence threshold for the feature.
+            use_gray_scale (bool): If True, convert image to grayscale before finding the feature.
+
+        Returns:
+            List[Box]: A list of boxes where the feature is found.
+        """
+        if type(category_name) is list:
+            results = []
+            for cn in category_name:
+                results += self.find_one_feature(mat=mat, category_name=cn,
+                                                 horizontal_variance=horizontal_variance,
+                                                 vertical_variance=vertical_variance, threshold=threshold,
+                                                 use_gray_scale=use_gray_scale, x=x, y=y,
+                                                 to_x=to_x, to_y=to_y, width=width, height=height, box=box,
+                                                 canny_lower=canny_lower, canny_higher=canny_higher,
+                                                 inverse_mask_color=inverse_mask_color, frame_processor=frame_processor,
+                                                 template=template, mask_function=mask_function)
+            return sort_boxes(results)
+        else:
+            return self.find_one_feature(mat=mat, category_name=category_name,
+                                         horizontal_variance=horizontal_variance,
+                                         vertical_variance=vertical_variance, threshold=threshold,
+                                         use_gray_scale=use_gray_scale, x=x, y=y,
+                                         to_x=to_x, to_y=to_y, width=width, height=height, box=box,
+                                         canny_lower=canny_lower, canny_higher=canny_higher,
+                                         inverse_mask_color=inverse_mask_color, frame_processor=frame_processor,
+                                         template=template, mask_function=mask_function)
 
 
 def read_from_json(coco_json, width=-1, height=-1):

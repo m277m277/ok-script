@@ -3,7 +3,6 @@ import sys
 from PySide6.QtCore import QSize, QCoreApplication
 from PySide6.QtGui import QIcon
 
-import gettext
 import ok
 from ok.analytics.Analytics import Analytics
 from ok.gui.Communicate import communicate
@@ -34,7 +33,10 @@ class App:
 
         self.about = self.config.get('about')
         self.title = self.config.get('gui_title')
+        self.app.setApplicationName(self.title)
+        self.app.setApplicationDisplayName(self.title)
         self.version = self.config.get('version')
+        self.app.setApplicationVersion(self.version)
         self.overlay = self.config.get('debug')
         if self.config.get('git_update'):
             self.updater = GitUpdater(self.config, exit_event)

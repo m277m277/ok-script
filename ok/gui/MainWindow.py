@@ -76,11 +76,12 @@ class MainWindow(MSFluentWindow):
         exit_action = menu.addAction(self.tr("Exit"))
         exit_action.triggered.connect(ok.gui.ok.quit)
 
-        self.tray = QSystemTrayIcon(icon)
+        self.tray = QSystemTrayIcon(icon, parent=self)
 
         # Set the context menu and show the tray icon
         self.tray.setContextMenu(menu)
         self.tray.show()
+        self.tray.setToolTip(title)
 
         # if ok.gui.device_manager.config.get("preferred") is None or self.onetime_tab is None:
         #     self.switchTo(self.start_tab)
@@ -131,7 +132,6 @@ class MainWindow(MSFluentWindow):
 
     def show_notification(self, message, title=None, error=False, tray=False):
         show_info_bar(self.window(), message, title, error)
-
         if tray:
             self.tray.showMessage(title, message, QSystemTrayIcon.Critical if error else QSystemTrayIcon.Information,
                                   5000)
@@ -150,7 +150,7 @@ class MainWindow(MSFluentWindow):
             self.switchTo(self.trigger_tab)
 
     def executor_paused(self, paused):
-        self.show_notification(self.tr("Start Success.") if not paused else self.tr("Pause Success."))
+        self.show_notification(self.tr("Start Success.") if not paused else self.tr("Pause Success."), tray=True)
 
     def btn_clicked(self):
         self.comm.speak.emit("Hello, PySide6 with parameters!")

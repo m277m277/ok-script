@@ -305,7 +305,7 @@ class TaskExecutor:
             except TaskDisabledException:
                 logger.info(f"TaskDisabledException, continue {task}")
                 from ok.gui import ok
-                communicate.notification.emit(QCoreApplication.translate("app", 'Stopped'), ok.app.tr(task.name), True,
+                communicate.notification.emit(QCoreApplication.translate("app", 'Stopped'), ok.app.tr(task.name), False,
                                               True)
                 continue
             except FinishedException:

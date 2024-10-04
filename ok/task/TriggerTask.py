@@ -13,7 +13,6 @@ class TriggerTask(BaseTask):
 
     def on_create(self):
         self._enabled = self.config.get('_enabled', False)
-        pass
 
     def get_status(self):
         if self.enabled:

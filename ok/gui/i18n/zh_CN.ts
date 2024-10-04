@@ -301,7 +301,7 @@
     <message>
         <location filename="../MainWindow.py" line="155"/>
         <source>Pause Success.</source>
-        <translation>暂停成功</translation>
+        <translation>已暂停</translation>
     </message>
     <message>
         <location filename="../MainWindow.py" line="78"/>

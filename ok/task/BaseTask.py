@@ -1,6 +1,6 @@
-import threading
 import time
 
+import threading
 from ok.config.Config import Config
 from ok.config.InfoDict import InfoDict
 from ok.gui.Communicate import communicate
@@ -69,9 +69,13 @@ class BaseTask(ExecutorOperation):
             return self._handler
 
     def pause(self):
-        self.executor.pause(self)
-        self._paused = True
-        communicate.task.emit(self)
+        from ok.task.TriggerTask import TriggerTask
+        if isinstance(self, TriggerTask):
+            self.executor.pause()
+        else:
+            self.executor.pause(self)
+            self._paused = True
+            communicate.task.emit(self)
         if self.executor.is_executor_thread():
             self.sleep(1)
 
@@ -84,18 +88,18 @@ class BaseTask(ExecutorOperation):
     def paused(self):
         return self._paused
 
-    def log_info(self, message, notify=False):
+    def log_info(self, message, notify=False, tray=False):
         self.logger.info(message)
         self.info_set("Log", message)
         if notify:
-            self.notification(message)
+            self.notification(message, tray=tray)
 
-    def log_debug(self, message, notify=False):
+    def log_debug(self, message, notify=False, tray=False):
         self.logger.debug(message)
         if notify:
-            self.notification(message)
+            self.notification(message, tray=tray)
 
-    def log_error(self, message, exception=None, notify=False):
+    def log_error(self, message, exception=None, notify=False, tray=False):
         self.logger.error(message, exception)
         if exception is not None:
             if len(exception.args) > 0:
@@ -104,11 +108,11 @@ class BaseTask(ExecutorOperation):
                 message += str(exception)
         self.info_set("Error", message)
         if notify:
-            self.notification(message, error=True)
+            self.notification(message, error=True, tray=tray)
 
-    def notification(self, message, title=None, error=False):
+    def notification(self, message, title=None, error=False, tray=False):
         from ok.gui import app
-        communicate.notification.emit(app.tr(message), app.tr(title), error, False)
+        communicate.notification.emit(app.tr(message), app.tr(title), error, tray)
 
     @property
     def enabled(self):
