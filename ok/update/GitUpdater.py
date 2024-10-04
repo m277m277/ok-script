@@ -105,7 +105,8 @@ class GitUpdater:
         self.read_launcher_config(path)
 
     def log_handler(self, level, message):
-        communicate.log.emit(level, message)
+        if "Skipping " not in message:
+            communicate.log.emit(level, message)
 
     def get_current_profile(self):
         return self.launch_profiles[self.launcher_config['profile_index']]

@@ -51,8 +51,9 @@ class ExecutorOperation:
         communicate.emit_draw_box("click", [Box(max(0, x - 10), max(0, y - 10), 20, 20, name="click")], "green",
                                   frame=self.executor.nullable_frame())
         self.executor.interaction.click(x, y, move_back, name=name, move=move, down_time=down_time)
+        if name:
+            self.logger.info(f'click {name} {x, y} after_sleep {after_sleep}')
         if after_sleep > 0:
-            self.logger.debug(f'click after_sleep: {after_sleep}')
             self.sleep(after_sleep)
         self.executor.reset_scene()
         return True
@@ -206,7 +207,7 @@ class ExecutorOperation:
     def width_of_screen(self, percent):
         return int(percent * self.executor.method.width)
 
-    def click_relative(self, x, y, move_back=False, hcenter=False, move=True, after_sleep=0):
+    def click_relative(self, x, y, move_back=False, hcenter=False, move=True, after_sleep=0, name=None):
         if self.out_of_ratio():
             should_width = self.executor.device_manager.supported_ratio * self.height
             x, y, w, h, scale = adjust_coordinates(x * should_width, y * self.height, 0, 0,
@@ -214,8 +215,7 @@ class ExecutorOperation:
                                                    self.height, hcenter=hcenter)
         else:
             x, y = int(self.width * x), int(self.height * y)
-
-        self.click(x, y, move_back, name=f'relative({x:.2f}, {y:.2f})', move=move, after_sleep=after_sleep)
+        self.click(x, y, move_back, name=name, move=move, after_sleep=after_sleep)
 
     def middle_click_relative(self, x, y, move_back=False, down_time=0.01):
         self.middle_click(int(self.width * x), int(self.height * y), move_back,
