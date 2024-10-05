@@ -130,10 +130,10 @@ def modify_venv_cfg(env_dir):
     python_dir = os.path.dirname(env_dir)
     file_path = os.path.join(env_dir, 'pyvenv.cfg')
     if os.path.exists(file_path):
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             lines = file.readlines()
 
-        with open(file_path, 'w') as file:
+        with open(file_path, 'w', encoding='utf-8') as file:
             for line in lines:
                 if line.startswith('home ='):
                     file.write(f'home = {python_dir}\n')
