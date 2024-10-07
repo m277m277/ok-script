@@ -170,12 +170,12 @@ class TaskExecutor:
         if self.current_task and not self.current_task.enabled:
             self.current_task = None
             raise TaskDisabledException()
+        self.reset_scene()
         if timeout <= 0:
             return
         if self.debug_mode:
             time.sleep(timeout)
             return
-        self.reset_scene()
         self.frame_stats.add_sleep(timeout)
         self.pause_end_time = time.time() + timeout
         while True:

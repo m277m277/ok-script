@@ -268,6 +268,9 @@ class GitUpdater:
                     if not my_cuda or is_newer_or_eq_version(my_cuda, requires_cuda) < 0:
                         continue
                 validated.append(profile)
+            if self.launch_profiles and self.launch_profiles != validated:
+                logger.info(f'launcher_config changed, set app_dependencies_installed = False')
+                self.launcher_config['app_dependencies_installed'] = False
             self.launch_profiles = validated
             if self.launcher_config.get('profile_index', 0) >= len(self.launch_profiles):
                 self.launcher_config['profile_index'] = 0
@@ -412,7 +415,6 @@ class GitUpdater:
             kill_process_by_path(python_folder)
             repo = self.check_out_version(version)
             self.read_launcher_config(repo.working_tree_dir)
-            self.launcher_config['app_dependencies_installed'] = False
             self.starting_version = version
             self.yanked = False
             self.outdated = False

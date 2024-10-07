@@ -19,19 +19,16 @@
         <translation type="vanished">下载开发版</translation>
     </message>
     <message>
-        <location filename="../about/AboutTab.py" line="97"/>
         <source>Beta Version</source>
-        <translation>测试版</translation>
+        <translation type="vanished">测试版</translation>
     </message>
     <message>
-        <location filename="../about/AboutTab.py" line="99"/>
         <source>Stable Version</source>
-        <translation>正式版</translation>
+        <translation type="vanished">正式版</translation>
     </message>
     <message>
-        <location filename="../about/AboutTab.py" line="108"/>
         <source>Download Error:</source>
-        <translation>下载错误: </translation>
+        <translation type="vanished">下载错误: </translation>
     </message>
 </context>
 <context>
@@ -207,22 +204,32 @@
 <context>
     <name>LinksBar</name>
     <message>
-        <location filename="../launcher/LinksBar.py" line="27"/>
+        <location filename="../launcher/LinksBar.py" line="28"/>
         <source>GitHub</source>
         <translation>GitHub</translation>
     </message>
     <message>
-        <location filename="../launcher/LinksBar.py" line="42"/>
+        <location filename="../launcher/LinksBar.py" line="33"/>
+        <source>Discord</source>
+        <translation>Discord</translation>
+    </message>
+    <message>
+        <location filename="../launcher/LinksBar.py" line="48"/>
         <source>FAQ</source>
         <translation>常见问题</translation>
     </message>
     <message>
-        <location filename="../launcher/LinksBar.py" line="47"/>
+        <location filename="../launcher/LinksBar.py" line="53"/>
         <source>Share</source>
         <translation>分享下载链接</translation>
     </message>
     <message>
-        <location filename="../launcher/LinksBar.py" line="57"/>
+        <location filename="../launcher/LinksBar.py" line="58"/>
+        <source>Sponsor</source>
+        <translation>赞助</translation>
+    </message>
+    <message>
+        <location filename="../launcher/LinksBar.py" line="68"/>
         <source>Share Link copied to clipboard</source>
         <translation>分享链接已经复制到剪切板</translation>
     </message>
@@ -243,38 +250,38 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.py" line="45"/>
+        <location filename="../MainWindow.py" line="43"/>
         <source>Tasks</source>
         <translation>任务</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="50"/>
+        <location filename="../MainWindow.py" line="48"/>
         <source>Triggers</source>
         <translation>实时触发</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="40"/>
+        <location filename="../MainWindow.py" line="38"/>
         <source>Capture</source>
         <translation>截图方式</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="54"/>
-        <location filename="../MainWindow.py" line="70"/>
+        <location filename="../MainWindow.py" line="52"/>
+        <location filename="../MainWindow.py" line="68"/>
         <source>Debug</source>
         <translation>开发工具</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="59"/>
+        <location filename="../MainWindow.py" line="57"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="65"/>
+        <location filename="../MainWindow.py" line="63"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="71"/>
+        <location filename="../MainWindow.py" line="69"/>
         <source>Release</source>
         <translation>正式版</translation>
     </message>
@@ -284,27 +291,27 @@
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="142"/>
+        <location filename="../MainWindow.py" line="141"/>
         <source>Please check whether the game window is selected correctly!</source>
         <translation>请检查游戏窗口是否正确选择</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="143"/>
+        <location filename="../MainWindow.py" line="142"/>
         <source>Capture Error</source>
         <translation>截图错误</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="155"/>
+        <location filename="../MainWindow.py" line="154"/>
         <source>Start Success.</source>
         <translation>启动成功</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="155"/>
+        <location filename="../MainWindow.py" line="154"/>
         <source>Pause Success.</source>
         <translation>已暂停</translation>
     </message>
     <message>
-        <location filename="../MainWindow.py" line="78"/>
+        <location filename="../MainWindow.py" line="76"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
@@ -389,7 +396,7 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../task/TaskExecutor.py" line="319"/>
+        <location filename="../../task/TaskExecutor.py" line="322"/>
         <source>app</source>
         <comment>Error</comment>
         <translation>错误</translation>
@@ -863,33 +870,33 @@
         <translation type="vanished">当前版本</translation>
     </message>
     <message>
-        <location filename="../launcher/UpdateBar.py" line="36"/>
+        <location filename="../launcher/UpdateBar.py" line="40"/>
         <source>Delete Downloaded Dependencies</source>
         <translation>删除已下载依赖</translation>
     </message>
     <message>
-        <location filename="../launcher/UpdateBar.py" line="47"/>
+        <location filename="../launcher/UpdateBar.py" line="51"/>
         <source>Update Source:</source>
         <translation>更新源:</translation>
     </message>
     <message>
-        <location filename="../launcher/UpdateBar.py" line="60"/>
+        <location filename="../launcher/UpdateBar.py" line="64"/>
         <source>Check for Update</source>
         <translation>检查更新</translation>
     </message>
     <message>
-        <location filename="../launcher/UpdateBar.py" line="69"/>
-        <location filename="../launcher/UpdateBar.py" line="87"/>
+        <location filename="../launcher/UpdateBar.py" line="73"/>
+        <location filename="../launcher/UpdateBar.py" line="91"/>
         <source>Update</source>
         <translation>更新版本</translation>
     </message>
     <message>
-        <location filename="../launcher/UpdateBar.py" line="75"/>
+        <location filename="../launcher/UpdateBar.py" line="79"/>
         <source>This is the newest version</source>
         <translation>已经是最新版本</translation>
     </message>
     <message>
-        <location filename="../launcher/UpdateBar.py" line="90"/>
+        <location filename="../launcher/UpdateBar.py" line="94"/>
         <source>Downgrade</source>
         <translation>降级版本</translation>
     </message>
@@ -897,63 +904,54 @@
 <context>
     <name>VersionCard</name>
     <message>
-        <location filename="../about/VersionCard.py" line="30"/>
         <source>Check for updates</source>
-        <translation>检查新版本</translation>
+        <translation type="vanished">检查新版本</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="50"/>
         <source>Downloading {progress} {percent}%</source>
-        <translation>下载中: {progress} {percent}%</translation>
+        <translation type="vanished">下载中: {progress} {percent}%</translation>
     </message>
     <message>
         <source>Update to {version} {type}</source>
         <translation type="vanished">更新到{version}{type}</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="58"/>
+        <location filename="../about/VersionCard.py" line="22"/>
         <source>Debug</source>
         <translation>开发版</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="60"/>
+        <location filename="../about/VersionCard.py" line="23"/>
         <source>Release</source>
         <translation>正式版</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="62"/>
         <source>Update Now</source>
-        <translation>现在更新</translation>
+        <translation type="vanished">现在更新</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="63"/>
         <source>Are you sure you want to update to {version} {type}?</source>
-        <translation>确定更新到{version}{type}吗？</translation>
+        <translation type="vanished">确定更新到{version}{type}吗？</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="80"/>
         <source>Info</source>
-        <translation>信息</translation>
+        <translation type="vanished">信息</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="83"/>
         <source>Found new version!</source>
-        <translation>发现新版本</translation>
+        <translation type="vanished">发现新版本</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="86"/>
         <source>Check for update error!</source>
-        <translation>检查更新错误</translation>
+        <translation type="vanished">检查更新错误</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="90"/>
         <source>This is the newest version!</source>
-        <translation>目前已经是最新版本！</translation>
+        <translation type="vanished">目前已经是最新版本！</translation>
     </message>
     <message>
-        <location filename="../about/VersionCard.py" line="103"/>
         <source>Checking for updates</source>
-        <translation>检查更新</translation>
+        <translation type="vanished">检查更新</translation>
     </message>
 </context>
 <context>
@@ -967,18 +965,18 @@
         <translation type="vanished">海外</translation>
     </message>
     <message>
-        <location filename="../App.py" line="94"/>
-        <location filename="../App.py" line="100"/>
+        <location filename="../App.py" line="96"/>
+        <location filename="../App.py" line="102"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../App.py" line="96"/>
+        <location filename="../App.py" line="98"/>
         <source>Another instance is already running</source>
         <translation>另一个实例已经在运行, 请手动结束另一个实例.</translation>
     </message>
     <message>
-        <location filename="../App.py" line="101"/>
+        <location filename="../App.py" line="103"/>
         <source>Install dir {path} must be an English path, move to another path.</source>
         <translation>安装目录{path}必须是英文目录，请移动到英文目录。</translation>
     </message>
@@ -991,7 +989,7 @@
         <translation type="vanished">已暂停：游戏已经退出！</translation>
     </message>
     <message>
-        <location filename="../../task/TaskExecutor.py" line="305"/>
+        <location filename="../../task/TaskExecutor.py" line="308"/>
         <source>Stopped</source>
         <translation>已停止</translation>
     </message>
@@ -1004,47 +1002,47 @@
         <translation type="vanished">游戏在后台时静音</translation>
     </message>
     <message>
-        <location filename="../launcher/LauncherWindow.py" line="31"/>
+        <location filename="../launcher/LauncherWindow.py" line="30"/>
         <source>{} Launcher</source>
         <translation>{} 启动器</translation>
     </message>
     <message>
-        <location filename="../../update/GitUpdater.py" line="121"/>
+        <location filename="../../update/GitUpdater.py" line="124"/>
         <source>The current version {} must be updated</source>
         <translation>当前版本{}必须更新</translation>
     </message>
     <message>
-        <location filename="../../update/GitUpdater.py" line="180"/>
+        <location filename="../../update/GitUpdater.py" line="183"/>
         <source>Updates:</source>
         <translation>更新内容:</translation>
     </message>
     <message>
-        <location filename="../../update/GitUpdater.py" line="315"/>
+        <location filename="../../update/GitUpdater.py" line="365"/>
         <source>Delete dependencies success!</source>
         <translation>删除依赖成功</translation>
     </message>
     <message>
-        <location filename="../../update/GitUpdater.py" line="328"/>
+        <location filename="../../update/GitUpdater.py" line="378"/>
         <source>Start downloading</source>
         <translation>开始下载依赖</translation>
     </message>
     <message>
-        <location filename="../../update/GitUpdater.py" line="330"/>
+        <location filename="../../update/GitUpdater.py" line="380"/>
         <source>Install dependencies Failed</source>
         <translation>安装依赖失败</translation>
     </message>
     <message>
-        <location filename="../../update/GitUpdater.py" line="361"/>
+        <location filename="../../update/GitUpdater.py" line="411"/>
         <source>Already updated to version:</source>
         <translation>已经更新到版本:</translation>
     </message>
     <message>
-        <location filename="../../update/GitUpdater.py" line="548"/>
+        <location filename="../../update/GitUpdater.py" line="597"/>
         <source>Stable Version</source>
         <translation>正式版</translation>
     </message>
     <message>
-        <location filename="../../update/GitUpdater.py" line="550"/>
+        <location filename="../../update/GitUpdater.py" line="599"/>
         <source>Beta Version</source>
         <translation>测试版</translation>
     </message>
