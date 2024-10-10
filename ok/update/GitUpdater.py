@@ -300,12 +300,12 @@ class GitUpdater:
                 output = process.stdout.readline()
                 if output == '' and process.poll() is not None:
                     break
-                if output:
+                if output and 'Skipping' not in output:
                     logger.info(output.strip())
 
             # Print any remaining stderr
             stderr = process.communicate()[1]
-            if stderr:
+            if stderr and 'Skipping' not in stderr:
                 logger.error(stderr.strip())
 
             # Check if the installation was successful
@@ -355,14 +355,14 @@ class GitUpdater:
         if self.handler.post(self.do_clear_dependencies, skip_if_running=True, remove_existing=True):
             communicate.update_running.emit(True)
 
-    @staticmethod
-    def do_clear_dependencies():
+    def do_clear_dependencies(self):
         try:
             delete_if_exists('paddle_model')
             app_python_folder = os.path.abspath(os.path.join('python', 'app_env'))
             kill_process_by_path(app_python_folder)
             delete_if_exists(app_python_folder)
             alert_info(QCoreApplication.translate('app', f'Delete dependencies success!'))
+            self.launcher_config['app_dependencies_installed'] = False
         except Exception as e:
             logger.error(f"failed to clear dependencies. ", e)
             alert_error(QCoreApplication.translate('app', 'Failed to clear dependencies. {}'.format(str(e))))

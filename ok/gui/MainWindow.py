@@ -4,6 +4,7 @@ from qfluentwidgets import FluentIcon, NavigationItemPosition, MSFluentWindow, I
 
 import ok.gui
 from ok.config.Config import Config
+from ok.config.ConfigOption import ConfigOption
 from ok.gui.Communicate import communicate
 from ok.gui.about.AboutTab import AboutTab
 from ok.gui.debug.DebugTab import DebugTab
@@ -16,6 +17,10 @@ from ok.gui.util.app import show_info_bar
 from ok.gui.widget.StartLoadingDialog import StartLoadingDialog
 from ok.logging.Logger import get_logger
 
+auto_start_config_option = ConfigOption('Auto Start Game', {
+    'Auto Start Game When App Starts': True
+}, icon=FluentIcon.GAME)
+
 logger = get_logger(__name__)
 
 
@@ -27,6 +32,7 @@ class MainWindow(MSFluentWindow):
     def __init__(self, config, icon, title, version, debug=False, about=None, exit_event=None):
         super().__init__()
         logger.info('main window __init__')
+        self.auto_start_config = ok.gui.executor.global_config.get_config(auto_start_config_option)
         self.main_window_config = Config('main_window', {'last_version': 'v0.0.0'})
         self.original_layout = None
         self.exit_event = exit_event
@@ -100,7 +106,8 @@ class MainWindow(MSFluentWindow):
         if event.type() == QEvent.Show:
             logger.info("Window has fully displayed")
             ok.gui.app.updater.update_launcher()
-            ok.gui.app.start_controller.start()
+            if self.auto_start_config.get('Auto Start Game When App Starts'):
+                ok.gui.app.start_controller.start()
         super().showEvent(event)
 
     def starting_emulator(self, done, error, seconds_left):

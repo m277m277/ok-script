@@ -268,7 +268,7 @@ class ExecutorOperation:
         self.executor.interaction.send_key(key, down_time)
         return True
 
-    def get_config(self, option: ConfigOption):
+    def get_global_config(self, option: ConfigOption):
         return self.executor.global_config.get_config(option)
 
     def send_key_down(self, key):

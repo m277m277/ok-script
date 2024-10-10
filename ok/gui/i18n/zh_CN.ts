@@ -1002,6 +1002,14 @@
         <translation type="vanished">游戏在后台时静音</translation>
     </message>
     <message>
+        <source>Auto Start Game</source>
+        <translation type="vanished">自动启动游戏</translation>
+    </message>
+    <message>
+        <source>Auto Start Game When App Starts</source>
+        <translation type="vanished">程序启动时候自动启动游戏</translation>
+    </message>
+    <message>
         <location filename="../launcher/LauncherWindow.py" line="30"/>
         <source>{} Launcher</source>
         <translation>{} 启动器</translation>
